@@ -8,7 +8,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" id="pwaManifest">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-title" content="MRI Booking">
+<meta name="msapplication-TileImage" content="icons/mstile-144.png">
+<meta name="msapplication-TileColor" content="#0a0f1e">
 <script>
 // تحميل فونت Tajawal — يجرب bunny.net أولاً ثم Google Fonts
 // لو الاتنين فشلوا (offline) بيرجع لفونتات النظام العربية تلقائياً
@@ -27,28 +37,6 @@
     document.head.appendChild(link);
   }
   tryNext();
-})();
-</script>
-<script>
-// ══ PWA MANIFEST (inline blob) ══════════════════════════════════════════════
-(function injectManifest() {
-  const manifest = {
-    name: 'MRI Booking',
-    short_name: 'MRI',
-    description: 'نظام حجز MRI',
-    start_url: '.',
-    display: 'standalone',
-    orientation: 'portrait',
-    background_color: '#0a0f1e',
-    theme_color: '#0a0f1e',
-    lang: 'ar',
-    icons: [
-      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-size='300' font-family='Arial'%3E%F0%9F%8F%A5%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml' }
-    ]
-  };
-  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-  const el = document.getElementById('pwaManifest');
-  if (el) el.href = URL.createObjectURL(blob);
 })();
 </script>
 <style>
@@ -1240,6 +1228,29 @@ body.light #chatInput { background: #f0f4fc; }
 .guide-body .g-fields-table th { background:var(--surface2-solid); padding:7px 10px; text-align:right; font-size:11px; font-weight:800; color:var(--muted); border:1px solid var(--border); }
 .guide-body .g-fields-table td { padding:7px 10px; border:1px solid var(--border); vertical-align:middle; }
 
+
+/* ══ MOVE CASES (admin) ══ */
+.mv-cb { width: 20px; height: 20px; accent-color: #3b82f6; cursor: pointer; flex-shrink: 0; margin-inline-end: 6px; vertical-align: middle; }
+body.move-mode .case-card, body.move-mode #tableBody tr { cursor: pointer; }
+body.move-mode .case-card.mv-selected { outline: 2px solid #3b82f6; background: rgba(59,130,246,.14) !important; }
+body.move-mode #tableBody tr.mv-selected td { background: rgba(59,130,246,.14) !important; }
+#moveBar { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 150; display: none; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border-radius: 16px; background: var(--surface-solid); border: 1px solid rgba(96,165,250,.5); box-shadow: 0 10px 40px rgba(0,0,0,.55); max-width: 560px; margin: 0 auto; }
+#moveBar.show { display: flex; }
+#moveBar .mv-count { flex: 1; font-weight: 800; font-size: 14px; color: var(--text); min-width: 90px; }
+#moveBar button { font-family: inherit; font-size: 13px; font-weight: 700; border-radius: 10px; padding: 9px 14px; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); }
+#moveBar button.mv-go { background: linear-gradient(135deg,#60a5fa,#3b82f6); color: #0f172a; border: none; }
+#moveBar button.mv-go:disabled { opacity: .4; cursor: not-allowed; }
+.mvcal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.mvcal-nav button { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; width: 38px; height: 38px; font-size: 18px; cursor: pointer; font-family: inherit; }
+.mvcal-title { font-weight: 800; font-size: 16px; }
+.mvcal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; direction: rtl; }
+.mvcal-dow { text-align: center; font-size: 12px; color: var(--muted); font-weight: 700; padding: 4px 0; }
+.mvcal-day { aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+.mvcal-day.empty { visibility: hidden; }
+.mvcal-day.today { border-color: var(--yellow); color: var(--yellow); }
+.mvcal-day.current { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
+.mvcal-day.sel { background: linear-gradient(135deg,#60a5fa,#3b82f6); color: #0f172a; border-color: transparent; font-weight: 800; }
+body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important; }
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -1651,6 +1662,7 @@ body.light #chatInput { background: #f0f4fc; }
   <div id="adminToolbar" class="admin-toolbar" style="display:none">
     <span class="admin-toolbar-label">👑 <span id="adminToolbarName"></span></span>
     <span style="font-size:11px;color:var(--yellow);opacity:.7;margin-right:4px">— وضع الأدمن</span>
+    <button class="btn-admin" id="moveSelBtn" onclick="toggleMoveMode()" style="color:var(--accent);border-color:rgba(96,165,250,.45)">🔀 تحديد ونقل</button>
     <button class="btn-admin" id="adminUnlockDayBtn" onclick="adminUnlockDay()" style="display:none;color:var(--green);border-color:rgba(52,211,153,.4)">🔓 تنشيط اليوم</button>
   </div>
 
@@ -2066,6 +2078,35 @@ body.light #chatInput { background: #f0f4fc; }
   </div>
 </div>
 
+
+<!-- MOVE BAR -->
+<div id="moveBar">
+  <span class="mv-count" id="mvCount">0 محددة</span>
+  <button onclick="moveSelectAll()">الكل</button>
+  <button class="mv-go" id="mvGoBtn" onclick="openMoveModal()" disabled>📅 نقل</button>
+  <button onclick="exitMoveMode()">✕</button>
+</div>
+
+<!-- MOVE MODAL -->
+<div class="modal-overlay" id="moveModal" style="display:none" onclick="if(event.target===this)closeMoveModal()">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <h3>📅 نقل الحالات لليوم</h3>
+      <button class="btn-close" onclick="closeMoveModal()">✕</button>
+    </div>
+    <div id="mvModalInfo" style="font-size:13px;color:var(--muted);margin-bottom:12px"></div>
+    <div class="mvcal-nav">
+      <button onclick="mvCalShift(1)">›</button>
+      <div class="mvcal-title" id="mvCalTitle"></div>
+      <button onclick="mvCalShift(-1)">‹</button>
+    </div>
+    <div class="mvcal-grid" id="mvCalGrid"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-save" id="mvConfirmBtn" onclick="confirmMove()" disabled>اختر يوماً</button>
+      <button class="btn-cancel" onclick="closeMoveModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
 <!-- ══ BULK ADD MODAL ══ -->
 <div class="modal-overlay" id="bulkModal" style="display:none" onclick="if(event.target===this)closeBulkModal()">
   <div class="modal" style="max-width:520px">
@@ -3044,6 +3085,7 @@ function updateExamDate() {
   document.getElementById('examDateDisplay').textContent = formatDate(examDate);
   document.getElementById('printDateStr').textContent = formatDate(examDate);
   isRangeMode = false;
+  if (moveMode) exitMoveMode();
   document.getElementById('rangeResultsBar').classList.remove('show');
   if (currentUser) { subscribeCases(examDate); subscribeDayLock(); }
   refreshDayPermissionUI();
@@ -3070,6 +3112,7 @@ function renderAll() {
   renderCards(data);
   if (currentUser) applySubUserRestrictions(currentUser);
   updateAdminUnlockBtn();
+  decorateMoveMode();
 }
 
 // ══ TABLE ══════════════════════════════════════════════════════════════════
@@ -3137,7 +3180,7 @@ function renderTable(data) {
 
     const rowClass = isDeleted ? 'deleted-row' : (done ? 'done-row' : '') + (locked ? ' locked-row' : '');
     return `
-      <tr class="${rowClass}">
+      <tr class="${rowClass}" data-id="${c.id}">
         <td style="text-align:center"><input type="checkbox" class="done-cb" ${done?'checked':''} onchange="toggleDone('${c.id}',this.checked)" title="منجزة" ${(locked||isDeleted)&&!isAdmin?'disabled':''}></td>
         <td class="serial-num">${isDeleted ? '🗑️' : (i+1)}</td>
         <td>
@@ -3379,6 +3422,166 @@ function setupSwipe(id) {
 }
 
 // ══ MOVE ═══════════════════════════════════════════════════════════════════
+// ══ MOVE CASES BETWEEN DAYS (admin only) ═══════════════════════════════
+let moveMode = false;
+let moveSel = new Set();       // group keys (groupId || id)
+let mvCalYear = 0, mvCalMonth = 0, mvTarget = '';
+const mvKey = c => c.groupId || c.id;
+
+function toggleMoveMode() {
+  if (!currentUser?.admin) return;
+  if (moveMode) { exitMoveMode(); return; }
+  if (isRangeMode) { showToast('اقفل البحث بنطاق تاريخي الأول', 'error'); return; }
+  moveMode = true; moveSel.clear();
+  document.body.classList.add('move-mode');
+  const b = document.getElementById('moveSelBtn'); if (b) b.textContent = '✕ إلغاء التحديد';
+  renderAll();
+}
+function exitMoveMode() {
+  moveMode = false; moveSel.clear();
+  document.body.classList.remove('move-mode');
+  const b = document.getElementById('moveSelBtn'); if (b) b.textContent = '🔀 تحديد ونقل';
+  document.getElementById('moveBar').classList.remove('show');
+  renderAll();
+}
+function moveToggleId(id) {
+  const c = cases.find(x => x.id === id);
+  if (!c || c.softDeleted) return;
+  const k = mvKey(c);
+  moveSel.has(k) ? moveSel.delete(k) : moveSel.add(k);
+  mvRefreshSelectionUI();
+}
+function moveSelectAll() {
+  const live = cases.filter(c => !c.softDeleted);
+  if (moveSel.size === new Set(live.map(mvKey)).size) moveSel.clear();
+  else live.forEach(c => moveSel.add(mvKey(c)));
+  mvRefreshSelectionUI();
+}
+function mvSelectedCases() { return cases.filter(c => moveSel.has(mvKey(c))); }
+function mvRefreshSelectionUI() {
+  // sync checkboxes + highlight without full re-render
+  document.querySelectorAll('[data-mvid]').forEach(el => {
+    const c = cases.find(x => x.id === el.dataset.mvid);
+    const on = !!c && moveSel.has(mvKey(c));
+    el.classList.toggle('mv-selected', on);
+    const cb = el.querySelector('.mv-cb'); if (cb) cb.checked = on;
+  });
+  const n = new Set(mvSelectedCases().filter(c => !c.softDeleted).map(mvKey)).size;
+  document.getElementById('mvCount').textContent = n + ' محددة';
+  document.getElementById('mvGoBtn').disabled = n === 0;
+  document.getElementById('moveBar').classList.toggle('show', moveMode);
+}
+// called at end of renderAll(): inject checkboxes into rows/cards
+function decorateMoveMode() {
+  if (!moveMode) return;
+  document.querySelectorAll('#tableBody tr[data-id]').forEach(tr => {
+    if (tr.classList.contains('deleted-row')) return;
+    tr.dataset.mvid = tr.dataset.id;
+    const td = tr.querySelector('td'); if (td && !td.querySelector('.mv-cb')) td.insertAdjacentHTML('afterbegin', '<input type="checkbox" class="mv-cb">');
+  });
+  document.querySelectorAll('.case-card[data-id]').forEach(card => {
+    if (card.classList.contains('deleted-card')) return;
+    card.dataset.mvid = card.dataset.id;
+    const top = card.querySelector('.card-top'); if (top && !top.querySelector('.mv-cb')) top.insertAdjacentHTML('afterbegin', '<input type="checkbox" class="mv-cb">');
+  });
+  mvRefreshSelectionUI();
+}
+// tap on a row/card toggles selection while in move mode (capture phase = beats other handlers)
+document.addEventListener('click', e => {
+  if (!moveMode) return;
+  const el = e.target.closest('[data-mvid]');
+  if (!el) return;
+  if (!e.target.classList.contains('mv-cb')) e.preventDefault();
+  e.stopPropagation();
+  moveToggleId(el.dataset.mvid);
+}, true);
+
+function openMoveModal() {
+  if (!currentUser?.admin) return;
+  const sel = mvSelectedCases();
+  if (!sel.length) return;
+  const n = new Set(sel.map(mvKey)).size;
+  document.getElementById('mvModalInfo').textContent = `${n} حالة من ${formatDate(examDate)}`;
+  const d = new Date(examDate + 'T00:00:00');
+  mvCalYear = d.getFullYear(); mvCalMonth = d.getMonth(); mvTarget = '';
+  mvRenderCal();
+  document.getElementById('moveModal').style.display = 'flex';
+}
+function closeMoveModal() { document.getElementById('moveModal').style.display = 'none'; }
+function mvCalShift(dir) {
+  mvCalMonth += dir;
+  if (mvCalMonth < 0) { mvCalMonth = 11; mvCalYear--; }
+  if (mvCalMonth > 11) { mvCalMonth = 0; mvCalYear++; }
+  mvRenderCal();
+}
+function mvPad(n) { return String(n).padStart(2, '0'); }
+function mvRenderCal() {
+  document.getElementById('mvCalTitle').textContent =
+    new Date(mvCalYear, mvCalMonth, 1).toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
+  const dows = ['س','ح','ن','ث','ر','خ','ج']; // Sat..Fri
+  let h = dows.map(x => `<div class="mvcal-dow">${x}</div>`).join('');
+  const first = new Date(mvCalYear, mvCalMonth, 1).getDay();      // 0=Sun
+  const offset = (first + 1) % 7;                                  // Sat-first
+  const days = new Date(mvCalYear, mvCalMonth + 1, 0).getDate();
+  for (let i = 0; i < offset; i++) h += '<button class="mvcal-day empty" disabled></button>';
+  const today = getTodayStr();
+  for (let d = 1; d <= days; d++) {
+    const ds = `${mvCalYear}-${mvPad(mvCalMonth + 1)}-${mvPad(d)}`;
+    const cls = ['mvcal-day', ds === today ? 'today' : '', ds === examDate ? 'current' : '', ds === mvTarget ? 'sel' : ''].join(' ');
+    h += `<button class="${cls}" ${ds === examDate ? 'disabled' : ''} onclick="mvPick('${ds}')">${d.toLocaleString('ar-EG')}</button>`;
+  }
+  document.getElementById('mvCalGrid').innerHTML = h;
+  const btn = document.getElementById('mvConfirmBtn');
+  btn.disabled = !mvTarget;
+  btn.textContent = mvTarget ? `نقل إلى ${formatDate(mvTarget)}` : 'اختر يوماً';
+}
+function mvPick(ds) { mvTarget = ds; mvRenderCal(); }
+
+async function confirmMove() {
+  if (!currentUser?.admin || !mvTarget || mvTarget === examDate) return;
+  const moving = mvSelectedCases();
+  if (!moving.length) return;
+  const btn = document.getElementById('mvConfirmBtn');
+  btn.disabled = true; btn.textContent = '⏳ جاري النقل...';
+  const from = examDate, to = mvTarget;
+  try {
+    // existing cases on target day → append at the end
+    let baseOrder = 0;
+    if (fsReady()) {
+      const snap = await window._getDocs(window._query(window._col('cases'), window._where('date', '==', to)));
+      snap.docs.forEach(d => { baseOrder = Math.max(baseOrder, (d.data().order ?? -1) + 1); });
+    } else {
+      baseOrder = loadCasesLocal(to).length;
+    }
+    const now = Date.now();
+    const moved = moving.map((c, i) => {
+      const u = { ...c, date: to, order: baseOrder + i, movedFrom: from, movedBy: currentUser.name, movedAt: now };
+      delete u.techLockedBy; delete u.techLockedByName; delete u.techLockedAt;
+      return u;
+    });
+    if (fsReady()) {
+      const batch = window._writeBatch();
+      moved.forEach(c => batch.set(window._doc('cases', c.id), c));
+      await batch.commit();
+    }
+    // local state: remove from source day, append to target cache
+    const ids = new Set(moved.map(c => c.id));
+    cases = cases.filter(c => !ids.has(c.id));
+    saveCasesLocal(from, cases);
+    saveCasesLocal(to, [...loadCasesLocal(to).filter(c => !ids.has(c.id)), ...moved]);
+    // log once per patient group
+    const seen = new Set();
+    moved.forEach(c => { const k = mvKey(c); if (seen.has(k)) return; seen.add(k); addLog('move', currentUser.name, c.name, c.exam, '← ' + formatDate(to)); });
+    closeMoveModal();
+    exitMoveMode();
+    showToast(`✅ تم نقل ${seen.size} حالة إلى ${formatDate(to)}`, 'success', 4000);
+  } catch (e) {
+    console.warn('move error', e);
+    showToast('❌ فشل النقل — جرّب تاني', 'error');
+    mvRenderCal();
+  }
+}
+
 function moveCase(id, dir) {
   const idx = cases.findIndex(c => c.id === id);
   if (idx === -1) return;
@@ -3649,13 +3852,13 @@ async function restoreCase(id) {
 }
 
 // ══ LOG ════════════════════════════════════════════════════════════════════
-function addLog(action, user, name, exam) {
-  const labels = { add:'أضاف', edit:'عدّل', delete:'حذف' };
+function addLog(action, user, name, exam, extra) {
+  const labels = { add:'أضاف', edit:'عدّل', delete:'حذف', move:'نقل' };
   const entry = {
     id: 'log_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
     time: Date.now(),
     action, user,
-    msg: `${user} ${labels[action]} حالة: ${name} (${exam})`
+    msg: `${user} ${labels[action]} حالة: ${name} (${exam})${extra ? ' ' + extra : ''}`
   };
   activityLog.unshift(entry);
   if (activityLog.length > 100) activityLog = activityLog.slice(0, 100);
@@ -3668,10 +3871,10 @@ function addLog(action, user, name, exam) {
 function renderLog() {
   const el = document.getElementById('logList');
   if (!activityLog.length) { el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 12px">لا توجد عمليات بعد</div>'; return; }
-  const colors = { add:'action-type-add', edit:'action-type-edit', delete:'action-type-delete' };
+  const colors = { add:'action-type-add', edit:'action-type-edit', delete:'action-type-delete', move:'action-type-edit' };
   el.innerHTML = activityLog.map(l => `
     <div class="log-item">
-      <span class="user-tag ${colors[l.action]||''}">${l.action==='add'?'إضافة':l.action==='edit'?'تعديل':'حذف'}</span>
+      <span class="user-tag ${colors[l.action]||''}">${l.action==='add'?'إضافة':l.action==='edit'?'تعديل':l.action==='move'?'نقل':'حذف'}</span>
       <span class="log-msg">${escHtml(l.msg)}</span>
       <span class="log-time">${formatTime(l.time)}</span>
     </div>`).join('');
