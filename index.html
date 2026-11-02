@@ -9,15 +9,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <meta name="apple-mobile-web-app-title" content="MRI Booking">
-<meta name="msapplication-TileImage" content="icons/mstile-144.png">
+<meta name="msapplication-TileImage" content="mstile-144.png">
 <meta name="msapplication-TileColor" content="#0a0f1e">
 <script>
 // تحميل فونت Tajawal — يجرب bunny.net أولاً ثم Google Fonts
@@ -1251,6 +1251,28 @@ body.move-mode #tableBody tr.mv-selected td { background: rgba(59,130,246,.14) !
 .mvcal-day.current { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
 .mvcal-day.sel { background: linear-gradient(135deg,#60a5fa,#3b82f6); color: #0f172a; border-color: transparent; font-weight: 800; }
 body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important; }
+
+/* ══ UI UPGRADE: status colors / sticky toolbar / filters / touch ══ */
+:root{--st-done:#22c55e;--st-pending:#38bdf8;--st-emergency:#ef4444;--st-exception:#f59e0b;--st-internal:#10b981;--st-deleted:#ef4444;--st-locked:#3b82f6}
+.case-card::before{content:'';position:absolute;top:10px;bottom:10px;inset-inline-start:0;width:4px;border-radius:4px;background:var(--st,var(--st-pending));pointer-events:none}
+.case-card.st-emergency{--st:var(--st-emergency)}
+.case-card.st-exception{--st:var(--st-exception)}
+.case-card.st-internal{--st:var(--st-internal)}
+.case-card.done-card{--st:var(--st-done)}
+.case-card.deleted-card{--st:var(--st-deleted)}
+.case-card.locked-card-admin{--st:var(--st-locked)}
+.filter-bar{display:flex;align-items:center;gap:6px;padding:6px 10px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-bar .fsep{width:1px;height:20px;background:var(--border);flex-shrink:0;margin:0 2px}
+.fchip{font-family:inherit;font-size:12px;font-weight:700;padding:7px 12px;min-height:34px;border-radius:999px;border:1px solid var(--border);background:var(--surface2,transparent);color:var(--muted);cursor:pointer;flex-shrink:0;transition:all .15s}
+.fchip.active{background:rgba(56,189,248,.16);color:var(--accent);border-color:var(--accent)}
+.fchip.clear{display:none;color:#ef4444;border-color:rgba(239,68,68,.4)}
+.fchip.clear.show{display:inline-block}
+@media (max-width:639px){
+  .toolbar{position:sticky;top:54px;z-index:40;backdrop-filter:blur(10px);background:var(--surface,#0f172a)}
+  .card-btn-edit,.card-btn-del,.btn-move{min-width:42px;min-height:42px}
+  .mob-btn-add{min-height:48px;font-size:15px}
+}
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -1677,6 +1699,19 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
     <button class="btn-admin" id="toggleRangeBtn" onclick="toggleDateRange()" style="white-space:nowrap">📅 نطاق</button>
   </div>
 
+  <div class="filter-bar" id="filterBar">
+    <button class="fchip active" data-g="status" data-v="all">الكل</button>
+    <button class="fchip" data-g="status" data-v="done">✅ منجزة</button>
+    <button class="fchip" data-g="status" data-v="pending">⏳ متبقية</button>
+    <span class="fsep"></span>
+    <button class="fchip active" data-g="type" data-v="all">كل الأنواع</button>
+    <button class="fchip" data-g="type" data-v="normal">عادي</button>
+    <button class="fchip" data-g="type" data-v="internal">داخلي</button>
+    <button class="fchip" data-g="type" data-v="emergency">🚨 طوارئ</button>
+    <button class="fchip" data-g="type" data-v="exception">استثناء</button>
+    <button class="fchip clear" id="fClear">✕ مسح الفلاتر</button>
+  </div>
+
   <!-- Date Range Search -->
   <div class="date-range-row" id="dateRangeRow" style="display:none">
     <label>من:</label>
@@ -1686,6 +1721,7 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
     <input type="date" id="rangeTo" class="date-input" style="padding:6px 10px;font-size:13px">
     <button class="btn-range-search" onclick="searchDateRange()">🔍 بحث</button>
     <button class="btn-range-clear" onclick="clearDateRange()">✕ مسح</button>
+    <button class="btn-range-search" id="dupScanBtn" style="display:none" onclick="scanDuplicates()">🔁 فحص التكرار</button>
   </div>
 
   <!-- Range results banner -->
@@ -3092,13 +3128,24 @@ function updateExamDate() {
 }
 
 // ══ RENDER ══════════════════════════════════════════════════════════════════
+const _flt={status:'all',type:'all'};
+document.addEventListener('click',function(e){
+  const b=e.target.closest('#filterBar .fchip'); if(!b) return;
+  if(b.id==='fClear'){_flt.status='all';_flt.type='all';}
+  else _flt[b.dataset.g]=b.dataset.v;
+  document.querySelectorAll('#filterBar .fchip[data-g]').forEach(x=>x.classList.toggle('active',_flt[x.dataset.g]===x.dataset.v));
+  document.getElementById('fClear').classList.toggle('show',_flt.status!=='all'||_flt.type!=='all');
+  renderAll();
+});
 function renderAll() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const source = isRangeMode ? rangeCases : cases;
   // الحالات المحذوفة ناعم لا تظهر للفنيين والسكرتارية — الأدمن يشوفها منفصلة في renderCards
   const data = source.filter(c =>
     !c.softDeleted &&
-    (!q || c.name.toLowerCase().includes(q) || c.exam.toLowerCase().includes(q) || (c.notes||'').toLowerCase().includes(q))
+    (!q || c.name.toLowerCase().includes(q) || c.exam.toLowerCase().includes(q) || (c.notes||'').toLowerCase().includes(q)) &&
+    (_flt.status==='all' || (_flt.status==='done') === !!doneStates[c.id]) &&
+    (_flt.type==='all' || (c.caseType||'normal')===_flt.type)
   );
   // Update badge with bump animation
   const badge = document.getElementById('countBadge');
@@ -3316,6 +3363,7 @@ function renderCards(data) {
     } else if (locked) {
       cardClass = ' locked-card-sub';
     }
+    if (!isDeleted && c.caseType && c.caseType!=='normal') cardClass += ' st-' + c.caseType;
     // ملحوظة: بعد "إنهاء اليوم" تتقفل الكروت لكل المستخدمين غير الأدمن — بما فيهم الفنيين
 
     return `
@@ -3721,6 +3769,163 @@ async function saveCase() {
     const gid = 'g' + ts;
     await Promise.all(cases.filter(x => x.groupId === gid).map(c => fsSaveCase(c)));
   }
+}
+
+// ══ SAFE-ADD: مسودة + منع تكرار + تأكيد قبل الحفظ ══════════════════════════
+const DRAFT_KEY = 'mriCaseDraft';
+const _TYPE_LBL = { normal:'عادي', internal:'داخلي', emergency:'🚨 طوارئ', exception:'استثناء' };
+function _normName(s){ return String(s||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLowerCase(); }
+function _fv(id){ const e=document.getElementById(id); return e ? e.value.trim() : ''; }
+let _draftTimer = null;
+function _saveDraft(){
+  if (editingId) return;
+  const d = { t:Date.now(), name:_fv('f_name'), weight:_fv('f_weight'), age:_fv('f_age'), nid:_fv('f_nid'), mobile:_fv('f_mobile'), referral:_fv('f_referral'), notes:_fv('f_notes'),
+    contrast: !!(document.getElementById('f_contrast') && document.getElementById('f_contrast').checked), type:_currentModalType||'normal', exams:getSelectedExams() };
+  try {
+    if (d.name || d.exams.length || d.nid || d.mobile || d.notes) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch(e){}
+}
+function clearDraft(){ try { localStorage.removeItem(DRAFT_KEY); } catch(e){} const b=document.getElementById('draftBanner'); if(b) b.remove(); }
+['input','change','click'].forEach(ev => document.addEventListener(ev, function(e){
+  const m = document.getElementById('caseModal');
+  if (!m || m.style.display === 'none' || !m.contains(e.target)) return;
+  clearTimeout(_draftTimer); _draftTimer = setTimeout(_saveDraft, 350);
+}));
+function _tryRestoreDraft(){
+  let d; try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch(e){ d = null; }
+  if (!d || Date.now() - d.t > 12*3600*1000 || !(d.name || (d.exams && d.exams.length))) return;
+  const set = (id,v) => { const e=document.getElementById(id); if(e) e.value = v || ''; };
+  set('f_name',d.name); set('f_weight',d.weight); set('f_age',d.age); set('f_nid',d.nid); set('f_mobile',d.mobile); set('f_referral',d.referral); set('f_notes',d.notes);
+  setContrastUI(!!d.contrast);
+  if (d.exams && d.exams.length) setSelectedExams(d.exams);
+  if (isTech() && d.type) setModalCaseType(d.type);
+  const title = document.getElementById('modalTitle');
+  if (title && !document.getElementById('draftBanner')) {
+    const b = document.createElement('div'); b.id = 'draftBanner';
+    b.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0;padding:8px 12px;border-radius:10px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:var(--yellow,#f59e0b);font-size:12px;font-weight:700';
+    b.innerHTML = '<span>📝 تم استرجاع مسودة غير محفوظة</span><button type="button" style="font-family:inherit;font-size:12px;font-weight:800;background:transparent;border:1px solid currentColor;color:inherit;border-radius:8px;padding:5px 10px;cursor:pointer">✕ ابدأ من جديد</button>';
+    b.querySelector('button').onclick = function(){ clearDraft(); openAddModal(); };
+    title.insertAdjacentElement('afterend', b);
+  }
+}
+const _origOpenAdd = openAddModal;
+openAddModal = function(){
+  const old = document.getElementById('draftBanner'); if (old) old.remove();
+  _origOpenAdd.apply(this, arguments);
+  const m = document.getElementById('caseModal');
+  if (m && m.style.display === 'flex' && !editingId) _tryRestoreDraft();
+};
+
+function _findDuplicate(name, nid){
+  const n = _normName(name);
+  return (cases||[]).find(c => !c.softDeleted && ((nid && c.nid && c.nid === nid) || (n && _normName(c.name) === n))) || null;
+}
+function _confirmSave(o){
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px';
+    const row = (k,v) => v ? `<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted);font-size:12px">${k}</span><b style="font-size:14px;text-align:left">${escHtml(String(v))}</b></div>` : '';
+    const dupHtml = o.dup ? `<div style="margin:10px 0;padding:10px 12px;border-radius:10px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.45);color:#f87171;font-size:13px;font-weight:700;line-height:1.7">⚠️ يوجد حجز بنفس ${o.dupBy} اليوم:<br>${escHtml(o.dup.name)} — ${escHtml(o.dup.exam)}${o.dup.lastUser ? ' (بواسطة ' + escHtml(o.dup.lastUser) + ')' : ''}</div>` : '';
+    ov.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;width:min(380px,100%);max-height:90vh;overflow:auto;color:var(--text);font-family:inherit">
+      <h4 style="margin:0 0 8px;font-size:16px;color:var(--accent);text-align:center">تأكيد الحجز</h4>${dupHtml}
+      ${row('الاسم',o.name)}${row('الفحص',o.exams.join(' + '))}${row('الوزن',o.weight ? o.weight + ' كجم' : '')}${row('الموبايل',o.mobile)}${row('صبغة',o.contrast ? 'نعم 💉' : '')}${row('النوع',_TYPE_LBL[o.type] || '')}
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button id="csOk" style="flex:2;min-height:46px;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;color:#0f172a;background:${o.dup ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,var(--accent),var(--accent2))'}">${o.dup ? 'حفظ رغم التكرار' : '✔ تأكيد وحفظ'}</button>
+        <button id="csNo" style="flex:1;min-height:46px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">رجوع</button>
+      </div></div>`;
+    const done = v => { ov.remove(); resolve(v); };
+    ov.querySelector('#csOk').onclick = () => done(true);
+    ov.querySelector('#csNo').onclick = () => done(false);
+    ov.addEventListener('click', e => { if (e.target === ov) done(false); });
+    document.body.appendChild(ov);
+  });
+}
+const _saveCaseCore = saveCase;
+let _saveBusy = false;
+saveCase = async function(){
+  if (_saveBusy) return;
+  _saveBusy = true;
+  try {
+    if (!editingId) {
+      const name = _fv('f_name'), exams = getSelectedExams();
+      if (name && exams.length) {
+        const nid = _fv('f_nid');
+        const dup = _findDuplicate(name, nid);
+        const ok = await _confirmSave({ name, exams, weight:_fv('f_weight'), mobile:_fv('f_mobile'),
+          contrast: !!(document.getElementById('f_contrast') && document.getElementById('f_contrast').checked),
+          type:_currentModalType || 'normal', dup, dupBy: (dup && nid && dup.nid === nid) ? 'الرقم القومي' : 'الاسم' });
+        if (!ok) return;
+      }
+    }
+    await _saveCaseCore.apply(this, arguments);
+    const m = document.getElementById('caseModal');
+    if (!editingId && m && m.style.display === 'none') clearDraft();
+  } finally { _saveBusy = false; }
+};
+
+// ══ فحص التكرار عبر الأيام (أدمن فقط — عند الطلب فقط) ═══════════════════════
+const _origToggleRange = toggleDateRange;
+toggleDateRange = function(){
+  _origToggleRange.apply(this, arguments);
+  const b = document.getElementById('dupScanBtn');
+  if (b) b.style.display = (currentUser && currentUser.admin) ? '' : 'none';
+};
+async function scanDuplicates(){
+  if (!(currentUser && currentUser.admin)) return;
+  const from = document.getElementById('rangeFrom').value, to = document.getElementById('rangeTo').value;
+  if (!from || !to) { showToast('⚠️ حدد تاريخ البداية والنهاية', 'error'); return; }
+  if (from > to) { showToast('⚠️ تاريخ البداية بعد النهاية!', 'error'); return; }
+  const days = Math.round((new Date(to) - new Date(from)) / 86400000) + 1;
+  if (days > 90) { showToast('⚠️ الحد الأقصى 90 يوم في الفحص الواحد', 'error'); return; }
+  showToast('🔁 جاري فحص التكرار...', 'info');
+  const all = await fsLoadRange(from, to);
+  const live = all.filter(c => !c.softDeleted);
+  // نجمّع الصفوف في "حجوزات" (الفحوصات المتعددة لنفس المريض في نفس الإضافة = حجز واحد)
+  const bk = new Map();
+  live.forEach(c => {
+    const date = c._date || c.date || '';
+    const k = date + '|' + (c.groupId || c.id);
+    let b = bk.get(k);
+    if (!b) { b = { date, name:c.name || '', nid:String(c.nid||'').replace(/\D/g,''), exams:[], user:c.lastUser || '' }; bk.set(k, b); }
+    if (c.exam) b.exams.push(c.exam);
+  });
+  const list = [...bk.values()];
+  // union-find: نربط الحجوزات اللي بنفس الرقم القومي أو الاسم
+  const p = list.map((_, i) => i);
+  const find = x => p[x] === x ? x : (p[x] = find(p[x]));
+  const byNid = new Map(), byName = new Map();
+  list.forEach((b, i) => {
+    if (b.nid.length >= 8) { if (byNid.has(b.nid)) p[find(i)] = find(byNid.get(b.nid)); else byNid.set(b.nid, i); }
+    const n = _normName(b.name);
+    if (n) { if (byName.has(n)) p[find(i)] = find(byName.get(n)); else byName.set(n, i); }
+  });
+  const comps = new Map();
+  list.forEach((b, i) => { const r = find(i); if (!comps.has(r)) comps.set(r, []); comps.get(r).push(b); });
+  const groups = [...comps.values()].filter(g => g.length > 1).sort((a, b) => b.length - a.length);
+  _showDupResults(groups, from, to, all.length);
+}
+function _showDupResults(groups, from, to, readCount){
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:14px';
+  const body = groups.length ? groups.map(g => {
+    const nids = new Map(), names = new Map();
+    g.forEach(b => { if (b.nid.length >= 8) nids.set(b.nid, (nids.get(b.nid)||0)+1); const n=_normName(b.name); names.set(n,(names.get(n)||0)+1); });
+    const byN = [...nids.values()].some(v => v > 1), byNm = [...names.values()].some(v => v > 1);
+    const why = [byN ? 'الرقم القومي' : '', byNm ? 'الاسم' : ''].filter(Boolean).join(' + ');
+    const rows = g.slice().sort((a,b) => a.date < b.date ? -1 : 1).map(b =>
+      `<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid var(--border);font-size:12px"><b>${escHtml(formatDate(b.date))}</b><span style="flex:1;text-align:center">${escHtml(b.exams.join(' + '))}</span><span style="color:var(--muted)">${escHtml(b.user)}</span></div>`).join('');
+    return `<div style="background:var(--surface2,transparent);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:14px">${escHtml(g[0].name)}</b><span style="font-size:11px;font-weight:800;color:#f59e0b">${g.length} حجوزات · بـ ${why}</span></div>${rows}</div>`;
+  }).join('') : '<div style="text-align:center;padding:24px 0;color:var(--muted)">✅ لا يوجد تكرار في هذه الفترة</div>';
+  ov.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px;width:min(460px,100%);max-height:88vh;overflow:auto;color:var(--text);font-family:inherit">
+    <h4 style="margin:0 0 4px;font-size:16px;color:var(--accent);text-align:center">🔁 نتيجة فحص التكرار</h4>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:12px">${escHtml(formatDate(from))} → ${escHtml(formatDate(to))} · قراءة ${readCount} مستند من Firestore · ${groups.length} حالة مكررة</div>
+    ${body}
+    <button style="width:100%;min-height:44px;margin-top:6px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">إغلاق</button></div>`;
+  const close = () => ov.remove();
+  ov.querySelector('button').onclick = close;
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  document.body.appendChild(ov);
 }
 
 // ══ DELETE ═════════════════════════════════════════════════════════════════
