@@ -1273,6 +1273,19 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
   .card-btn-edit,.card-btn-del,.btn-move{min-width:42px;min-height:42px}
   .mob-btn-add{min-height:48px;font-size:15px}
 }
+
+/* ══ تنظيم القوائم والأزرار ══ */
+.tools-group { margin-top: 10px; }
+.tools-group:first-of-type { margin-top: 0; }
+.tools-group-title { font-size: 11px; font-weight: 700; color: var(--muted); margin: 0 2px 6px; padding-bottom: 4px; border-bottom: 1px dashed var(--border); }
+.tools-item { min-height: 62px; justify-content: center; text-align: center; }
+.tools-item span { line-height: 1.2; }
+.tools-item.wide { grid-column: 1 / -1; flex-direction: row; min-height: 40px; gap: 8px; }
+.toolbar-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.tb-btn { height: 38px; padding: 0 12px !important; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 5px; border-radius: var(--radius) !important; font-family: inherit; font-size: 13px; white-space: nowrap; cursor: pointer; }
+.tb-btn.tb-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0f172a; border: none; font-size: 14px; font-weight: 700; padding: 0 18px !important; }
+.toolbar .date-input, .toolbar .search-box { height: 38px; box-sizing: border-box; }
+@media (max-width: 600px) { .tb-btn { height: 34px; padding: 0 8px !important; font-size: 12px; } .toolbar-actions { gap: 4px; } }
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -1647,32 +1660,63 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
 
     <div class="tools-section" id="toolsAdminSection" style="display:none">
       <div class="tools-section-title">🔐 الإدارة</div>
-      <div class="tools-grid">
-        <button class="tools-item" onclick="openMembersModal();closeToolsMenu()">👥<span>أعضاء</span></button>
-        <button class="tools-item" id="toolsSuperAdminBtn" style="display:none" onclick="openUserMgmtModal();closeToolsMenu()">🛡️<span>المستخدمين</span></button>
-        <button class="tools-item" id="toolsRulesBtn" style="display:none;background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)" onclick="openRulesModal();closeToolsMenu()">📏<span style="color:#a855f7">Rules</span></button>
-        <button class="tools-item" id="toolsDynUsersBtn"  style="display:none" onclick="openDynUsersModal();closeToolsMenu()">👤<span>إضافة مستخدم</span></button>
-        <button class="tools-item" id="toolsFbUsageBtn"   style="display:none" onclick="openFbUsageModal();closeToolsMenu()">📡<span>Firebase</span></button>
-        <button class="tools-item" onclick="openStatsModal();closeToolsMenu()">📊<span>إحصائيات</span></button>
-        <button class="tools-item" onclick="exportCSV();closeToolsMenu()">📥<span>CSV</span></button>
-        <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openJsonExportModal();closeToolsMenu()">📤<span style="color:#22c55e">JSON تصدير</span></button>
-        <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="openJsonImportModal();closeToolsMenu()">📥<span style="color:#fbbf24">JSON استيراد</span></button>
-        <button class="tools-item" onclick="openBulkModal();closeToolsMenu()">📋<span>دفعة</span></button>
-        <button class="tools-item danger" onclick="clearAllCases();closeToolsMenu()">🗑️<span>مسح الكل</span></button>
-        <button class="tools-item" onclick="openHistoryModal();closeToolsMenu()">📜<span>History</span></button>
+
+      <div class="tools-group" data-group>
+        <div class="tools-group-title">👥 الأعضاء والمستخدمين</div>
+        <div class="tools-grid">
+          <button class="tools-item" onclick="openMembersModal();closeToolsMenu()">👥<span>أعضاء</span></button>
+          <button class="tools-item" id="toolsDynUsersBtn" style="display:none" onclick="openDynUsersModal();closeToolsMenu()">👤<span>إضافة مستخدم</span></button>
+          <button class="tools-item" id="toolsSuperAdminBtn" style="display:none" onclick="openUserMgmtModal();closeToolsMenu()">🛡️<span>المستخدمين</span></button>
+          <button class="tools-item" id="toolsRulesBtn" style="display:none;background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)" onclick="openRulesModal();closeToolsMenu()">📏<span style="color:#a855f7">Rules</span></button>
+        </div>
+      </div>
+
+      <div class="tools-group" data-group>
+        <div class="tools-group-title">📊 التقارير والمتابعة</div>
+        <div class="tools-grid">
+          <button class="tools-item" onclick="openStatsModal();closeToolsMenu()">📊<span>إحصائيات</span></button>
+          <button class="tools-item" onclick="openHistoryModal();closeToolsMenu()">📜<span>History</span></button>
+          <button class="tools-item" id="toolsFbUsageBtn" style="display:none" onclick="openFbUsageModal();closeToolsMenu()">📡<span>Firebase</span></button>
+        </div>
+      </div>
+
+      <div class="tools-group" data-group>
+        <div class="tools-group-title">💾 البيانات (إدخال / تصدير)</div>
+        <div class="tools-grid">
+          <button class="tools-item" onclick="openBulkModal();closeToolsMenu()">📋<span>دفعة</span></button>
+          <button class="tools-item" onclick="exportCSV();closeToolsMenu()">📥<span>CSV</span></button>
+          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openJsonExportModal();closeToolsMenu()">📤<span style="color:#22c55e">JSON تصدير</span></button>
+          <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="openJsonImportModal();closeToolsMenu()">📥<span style="color:#fbbf24">JSON استيراد</span></button>
+        </div>
+      </div>
+
+      <div class="tools-group" data-group>
+        <div class="tools-group-title" style="color:var(--red)">⚠️ منطقة الخطر</div>
+        <div class="tools-grid">
+          <button class="tools-item danger wide" onclick="clearAllCases();closeToolsMenu()">🗑️<span>مسح الكل</span></button>
+        </div>
       </div>
     </div>
 
     <div class="tools-section" id="toolsUserSection">
-      <div class="tools-grid">
-        <button class="tools-item" onclick="toggleTheme();closeToolsMenu()" id="toolsThemeBtn">🌙<span>المظهر</span></button>
-        <button class="tools-item" onclick="doRefresh();closeToolsMenu()">🔄<span>تحديث</span></button>
-        <button class="tools-item" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3)" onclick="shareWhatsAppSummary();closeToolsMenu()">📲<span style="color:#25d366">واتساب</span></button>
-        <button class="tools-item" id="toolsConfirmDayBtn" onclick="confirmDayBooking();closeToolsMenu()" style="display:none;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">✅<span>تأكيد اليوم</span></button>
-        <button class="tools-item" id="toolsEndDayBtn" onclick="endTechDay();closeToolsMenu()" style="display:none;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🏁<span>إنهاء اليوم</span></button>
-        <button class="tools-item" id="toolsConsumablesBtn" onclick="openConsumablesModal();closeToolsMenu()" style="display:none;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.35)">🎬<span style="color:#fbbf24">مستهلكات</span></button>
-        <button class="tools-item" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3)" onclick="openGuideModal();closeToolsMenu()">📖<span style="color:var(--accent)">دليل</span></button>
-        <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()">🖨️<span style="color:#22c55e">طباعة</span></button>
+      <div class="tools-group" data-group>
+        <div class="tools-group-title">📅 اليوم</div>
+        <div class="tools-grid">
+          <button class="tools-item" id="toolsConfirmDayBtn" onclick="confirmDayBooking();closeToolsMenu()" style="display:none;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">✅<span>تأكيد اليوم</span></button>
+          <button class="tools-item" id="toolsEndDayBtn" onclick="endTechDay();closeToolsMenu()" style="display:none;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🏁<span>إنهاء اليوم</span></button>
+          <button class="tools-item" id="toolsConsumablesBtn" onclick="openConsumablesModal();closeToolsMenu()" style="display:none;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.35)">🎬<span style="color:#fbbf24">مستهلكات</span></button>
+          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()">🖨️<span style="color:#22c55e">طباعة</span></button>
+          <button class="tools-item" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3)" onclick="shareWhatsAppSummary();closeToolsMenu()">📲<span style="color:#25d366">واتساب</span></button>
+        </div>
+      </div>
+
+      <div class="tools-group" data-group>
+        <div class="tools-group-title">⚙️ عام</div>
+        <div class="tools-grid">
+          <button class="tools-item" onclick="toggleTheme();closeToolsMenu()" id="toolsThemeBtn">🌙<span>المظهر</span></button>
+          <button class="tools-item" onclick="doRefresh();closeToolsMenu()">🔄<span>تحديث</span></button>
+          <button class="tools-item" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3)" onclick="openGuideModal();closeToolsMenu()">📖<span style="color:var(--accent)">دليل</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -1691,9 +1735,11 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
   <div class="toolbar">
     <input type="date" id="examDatePicker" class="date-input" onchange="updateExamDate()">
     <input type="text" class="search-box" id="searchInput" placeholder="🔍 بحث..." oninput="renderAll()">
-    <button class="btn-print" id="userPrintBtn" onclick="openPrintSheetModal()" style="display:none">🖨️ طباعة</button>
-    <button class="btn-add desktop-add-btn" onclick="openAddModal()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0f172a;border:none;border-radius:var(--radius);padding:9px 18px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px">➕ إضافة</button>
-    <button class="btn-admin" id="toggleRangeBtn" onclick="toggleDateRange()" style="white-space:nowrap">📅 نطاق</button>
+    <div class="toolbar-actions">
+      <button class="btn-admin tb-btn" id="toggleRangeBtn" onclick="toggleDateRange()">📅 نطاق</button>
+      <button class="btn-print tb-btn" id="userPrintBtn" onclick="openPrintSheetModal()" style="display:none">🖨️ طباعة</button>
+      <button class="btn-add desktop-add-btn tb-btn tb-primary" onclick="openAddModal()">➕ إضافة</button>
+    </div>
   </div>
 
   <div class="filter-bar" id="filterBar">
@@ -5054,8 +5100,8 @@ function printTable() {
     const style = done ? 'background:#f0fdf4;text-decoration:line-through;opacity:.7' : '';
     return `<tr style="${style}">
       <td style="text-align:center">${i+1}</td>
-      <td>${escHtml(c.name)}</td>
-      <td>${escHtml(c.exam)}</td>
+      <td class="big">${escHtml(c.name)}</td>
+      <td class="big">${escHtml(c.exam)}</td>
       <td>${hasWeight ? c.weight + ' كجم' : ''}</td>
       <td>${hasNotes ? escHtml(c.notes) : ''}</td>
       <td style="text-align:center">${done ? '✅' : '⬜'}</td>
@@ -5078,6 +5124,7 @@ function printTable() {
     table{width:100%;border-collapse:collapse}
     th{background:#e0f2fe;color:#0369a1;padding:3px 5px;font-size:10px;border:1px solid #bae6fd;text-align:right}
     td{padding:2px 5px;font-size:11px;border:1px solid #e2e8f0;line-height:1.35}
+    td.big{font-size:13px;font-weight:700}
     tr:nth-child(even){background:#f8fafc}
     @media print{.no-print{display:none}}
   </style></head><body>
@@ -5085,6 +5132,7 @@ function printTable() {
     <button onclick="window.print()" style="background:#0284c7;color:#fff;border:none;border-radius:6px;padding:5px 16px;font-size:13px;cursor:pointer">🖨️ طباعة / PDF</button>
     <button onclick="window.close()" style="background:#e2e8f0;border:none;border-radius:6px;padding:5px 12px;cursor:pointer">إغلاق</button>
   </div>
+  <div id="sheet">
   <div class="hdr">
     <h1>🏥 MRI Booking</h1>
     <div class="meta">📅 ${date} · طُبع: ${new Date().toLocaleString('ar-EG')}</div>
@@ -5095,7 +5143,18 @@ function printTable() {
     <div class="stat"><div class="stat-n">${total - doneCount}</div><div class="stat-l">متبقي ⬜</div></div>
   </div>
   <table><thead><tr><th style="width:24px">م</th><th>الاسم</th><th>الفحص</th><th style="width:60px">الوزن</th><th>ملاحظات</th><th style="width:24px">✓</th></tr></thead><tbody>${rows}</tbody></table>
-  <script>window.onload=()=>{window.print();}<\/script>
+  </div>
+  <script>
+  // يضمن بقاء الجدول في صفحة A4 واحدة مهما كان عدد الحالات
+  function fitOnePage(){
+    const sheet=document.getElementById('sheet');
+    const maxH=1020;
+    sheet.style.zoom=1;
+    let z=1,guard=0;
+    while(sheet.getBoundingClientRect().height>maxH && z>0.4 && guard++<40){ z-=0.02; sheet.style.zoom=z; }
+  }
+  window.onload=()=>{fitOnePage();window.print();}
+  <\/script>
   </body></html>`;
 
   const w = window.open('', '_blank');
@@ -5256,6 +5315,11 @@ function toggleToolsMenu() {
   document.getElementById('toolsDynUsersBtn').style.display   = isSuperAdmin ? '' : 'none';
   document.getElementById('toolsFbUsageBtn').style.display   = isSuperAdmin ? '' : 'none';
   document.getElementById('noticeEditorSection').style.display = isAdmin ? '' : 'none';
+  // إخفاء أي مجموعة أزرار فاضية (عناوين بدون أزرار)
+  document.querySelectorAll('#toolsMenu [data-group]').forEach(g => {
+    const any = [...g.querySelectorAll('.tools-item')].some(b => b.style.display !== 'none');
+    g.style.display = any ? '' : 'none';
+  });
   // Load current notice into textarea if admin
   if (isAdmin) {
     const saved = localStorage.getItem('mriNotice') || document.getElementById('toolsNoticeText').textContent || '';
