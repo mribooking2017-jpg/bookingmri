@@ -1657,8 +1657,6 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
         <button class="tools-item" onclick="exportCSV();closeToolsMenu()">📥<span>CSV</span></button>
         <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openJsonExportModal();closeToolsMenu()">📤<span style="color:#22c55e">JSON تصدير</span></button>
         <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="openJsonImportModal();closeToolsMenu()">📥<span style="color:#fbbf24">JSON استيراد</span></button>
-        <button class="tools-item" onclick="exportPDF();closeToolsMenu()">🖨️<span>PDF</span></button>
-        <button class="tools-item" onclick="printTable();closeToolsMenu()">🖨️<span>طباعة</span></button>
         <button class="tools-item" onclick="openBulkModal();closeToolsMenu()">📋<span>دفعة</span></button>
         <button class="tools-item danger" onclick="clearAllCases();closeToolsMenu()">🗑️<span>مسح الكل</span></button>
         <button class="tools-item" onclick="openHistoryModal();closeToolsMenu()">📜<span>History</span></button>
@@ -1670,12 +1668,11 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
         <button class="tools-item" onclick="toggleTheme();closeToolsMenu()" id="toolsThemeBtn">🌙<span>المظهر</span></button>
         <button class="tools-item" onclick="doRefresh();closeToolsMenu()">🔄<span>تحديث</span></button>
         <button class="tools-item" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3)" onclick="shareWhatsAppSummary();closeToolsMenu()">📲<span style="color:#25d366">واتساب</span></button>
-        <button class="tools-item" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)" onclick="sharePDFReport();closeToolsMenu()">📄<span style="color:#f87171">PDF شير</span></button>
         <button class="tools-item" id="toolsConfirmDayBtn" onclick="confirmDayBooking();closeToolsMenu()" style="display:none;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">✅<span>تأكيد اليوم</span></button>
         <button class="tools-item" id="toolsEndDayBtn" onclick="endTechDay();closeToolsMenu()" style="display:none;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🏁<span>إنهاء اليوم</span></button>
         <button class="tools-item" id="toolsConsumablesBtn" onclick="openConsumablesModal();closeToolsMenu()" style="display:none;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.35)">🎬<span style="color:#fbbf24">مستهلكات</span></button>
         <button class="tools-item" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3)" onclick="openGuideModal();closeToolsMenu()">📖<span style="color:var(--accent)">دليل</span></button>
-        <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()">🖨️<span style="color:#22c55e">شيت طباعة</span></button>
+        <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()">🖨️<span style="color:#22c55e">طباعة</span></button>
       </div>
     </div>
   </div>
@@ -1694,7 +1691,7 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
   <div class="toolbar">
     <input type="date" id="examDatePicker" class="date-input" onchange="updateExamDate()">
     <input type="text" class="search-box" id="searchInput" placeholder="🔍 بحث..." oninput="renderAll()">
-    <button class="btn-print" id="userPrintBtn" onclick="printTable()" style="display:none">🖨️ طباعة</button>
+    <button class="btn-print" id="userPrintBtn" onclick="openPrintSheetModal()" style="display:none">🖨️ طباعة</button>
     <button class="btn-add desktop-add-btn" onclick="openAddModal()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0f172a;border:none;border-radius:var(--radius);padding:9px 18px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px">➕ إضافة</button>
     <button class="btn-admin" id="toggleRangeBtn" onclick="toggleDateRange()" style="white-space:nowrap">📅 نطاق</button>
   </div>
@@ -1885,7 +1882,7 @@ body.move-mode .tools-fab, body.move-mode .mob-fab { bottom: calc(90px + env(saf
     </div>
     <div id="statsContent"></div>
     <div class="modal-footer">
-      <button class="btn-pdf" onclick="exportPDF()">🖨️ تصدير PDF</button>
+      <button class="btn-pdf" onclick="exportPDF()">🖨️ PDF المنجز</button>
       <button class="btn-cancel" onclick="closeStatsModal()">إغلاق</button>
     </div>
   </div>
@@ -7401,25 +7398,51 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
   <iframe id="tourFrame" style="width:100%;height:100%;border:none;display:block;"></iframe>
 </div>
 
-<!-- ══ PRINT SHEET MODAL ══ -->
+<!-- ══ PRINT MODAL (موحّد) ══ -->
+<style>
+.pm-group{font-size:11px;font-weight:800;color:var(--muted);margin:6px 2px 0;display:flex;align-items:center;gap:6px}
+.pm-group::after{content:"";flex:1;height:1px;background:var(--border)}
+.pm-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:right;background:var(--surface2-solid);border:1px solid var(--border);border-right:4px solid var(--pm-c,var(--accent));border-radius:12px;padding:10px 12px;font-family:inherit;color:var(--text);cursor:pointer;transition:border-color .15s,background .15s}
+.pm-btn:hover{border-color:var(--pm-c,var(--accent));background:var(--surface-solid)}
+.pm-btn .ic{font-size:22px;flex-shrink:0}
+.pm-btn b{display:block;font-size:14px;font-weight:800}
+.pm-btn small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.pm-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pm-row .pm-btn{flex-direction:column;text-align:center;gap:4px;border-right:1px solid var(--border);border-top:4px solid var(--pm-c,var(--accent))}
+</style>
 <div id="printSheetModal" onclick="if(event.target===this)closePrintSheetModal()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px">
-  <div style="max-width:360px;width:100%;background:var(--surface-solid);border:1px solid var(--border-strong);border-radius:18px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6)">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2-solid)">
-      <h2 style="font-size:16px;font-weight:800;color:var(--accent);margin:0">🖨️ شيت الحجز اليومي</h2>
+  <div style="max-width:380px;width:100%;max-height:92vh;overflow-y:auto;background:var(--surface-solid);border:1px solid var(--border-strong);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2-solid);position:sticky;top:0">
+      <h2 style="font-size:16px;font-weight:800;color:var(--accent);margin:0">🖨️ الطباعة</h2>
       <button onclick="closePrintSheetModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 8px;border-radius:8px">✕</button>
     </div>
-    <div style="padding:20px 18px 24px;display:flex;flex-direction:column;gap:12px">
-      <p style="font-size:13px;color:var(--muted);margin:0 0 4px">اختر نوع الشيت اللي تحب تطبعه:</p>
-      <button onclick="openReservationPrintSheet()" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:12px;padding:14px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">📄 شيت الحجز بالحالات المسجلة <span style="font-weight:500;font-size:12px;opacity:.85">(تلقائي)</span></button>
-      <div style="border-top:1px solid var(--border);margin:4px 0;padding-top:8px;font-size:11px;color:var(--muted);text-align:center">— أو شيت فارغ —</div>
-      <button onclick="openPrintSheet('normal')" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;border:none;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">📋 يوم عادي فارغ <span style="font-weight:500;font-size:12px;opacity:.85">(30 حالة)</span></button>
-      <button onclick="openPrintSheet('emergency')" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">🚨 يوم طوارئ فارغ <span style="font-weight:500;font-size:12px;opacity:.85">(30 حالة)</span></button>
+    <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:8px">
+
+      <div class="pm-group">📋 قائمة اليوم (الحالات المسجلة)</div>
+      <button class="pm-btn" style="--pm-c:#0284c7" onclick="closePrintSheetModal();printTable()"><span class="ic">🖨️</span><span><b>قائمة اليوم</b><small>A4 طولي · كل الحالات مع خانة ✓</small></span></button>
+      <button class="pm-btn" style="--pm-c:#ef4444" onclick="closePrintSheetModal();sharePDFReport()"><span class="ic">📄</span><span><b>تقرير مفصّل</b><small>A4 عرضي · الفحوصات مجمّعة + السن والدفع</small></span></button>
+      <button class="pm-btn" id="pmDone" style="--pm-c:#16a34a" onclick="closePrintSheetModal();exportPDF()"><span class="ic">✅</span><span><b>المنجز فقط</b><small>A4 طولي · الحالات المنجزة + إحصائيات</small></span></button>
+
+      <div id="pmResvGroup" style="display:contents">
+        <div class="pm-group">📑 شيت الحجز</div>
+        <button class="pm-btn" style="--pm-c:#7c3aed" onclick="openReservationPrintSheet()"><span class="ic">📑</span><span><b>شيت الحجز بالأقسام</b><small>عادي / طوارئ / استثناء / داخلي</small></span></button>
+      </div>
+
+      <div class="pm-group">📝 شيتات فارغة (للكتابة باليد)</div>
+      <div class="pm-row">
+        <button class="pm-btn" style="--pm-c:#0ea5e9" onclick="openPrintSheet('normal')"><span class="ic">📋</span><span><b>يوم عادي</b><small>30 حالة</small></span></button>
+        <button class="pm-btn" style="--pm-c:#ea580c" onclick="openPrintSheet('emergency')"><span class="ic">🚨</span><span><b>يوم طوارئ</b><small>30 حالة</small></span></button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 function openPrintSheetModal() {
+  const admin = !!(currentUser && currentUser.admin);
+  const canSheet = admin || (typeof isTech === 'function' && isTech());
+  document.getElementById('pmDone').style.display = admin ? '' : 'none';
+  document.getElementById('pmResvGroup').style.display = canSheet ? 'contents' : 'none';
   document.getElementById('printSheetModal').style.display = 'flex';
 }
 function closePrintSheetModal() {
