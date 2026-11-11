@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MRI Booking</title>
-<meta name="theme-color" content="#004B93" id="themeColorMeta">
+<meta name="theme-color" content="#0B4F8A" id="themeColorMeta">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -18,14 +18,14 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <meta name="apple-mobile-web-app-title" content="MRI Booking">
 <meta name="msapplication-TileImage" content="mstile-144.png">
-<meta name="msapplication-TileColor" content="#004B93">
+<meta name="msapplication-TileColor" content="#0B4F8A">
 <script>
 // تحميل فونت Tajawal — يجرب bunny.net أولاً ثم Google Fonts
 // لو الاتنين فشلوا (offline) بيرجع لفونتات النظام العربية تلقائياً
 (function loadFont() {
   const sources = [
     'https://fonts.bunny.net/css?family=tajawal:300,400,500,700,800&display=swap',
-    'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap'
+    'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;600;700&display=swap'
   ];
   let i = 0;
   function tryNext() {
@@ -99,7 +99,7 @@ body.light {
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
-  font-family: 'Tajawal', 'Segoe UI', 'Helvetica Neue', 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
+  font-family: 'Tajawal', 'Cairo', 'Segoe UI', 'Helvetica Neue', 'Noto Sans Arabic', 'Arabic Typesetting', Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh; min-height: 100dvh;
@@ -1295,6 +1295,121 @@ body.app-active .log-section { color: #fff; }
 
 /* رقم الإصدار على شاشة الدخول */
 #loginScreen .app-version { position: absolute !important; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: 12px; letter-spacing: .5px; color: rgba(255,255,255,.7); text-shadow: 0 1px 6px rgba(0,0,0,.6); pointer-events: none; z-index: 2; }
+
+/* ══════════════════════════════════════════════════════════════
+   هوية التصميم: أزرق طبي غامق + سماوي هادئ + خلفية رمادي فاتح
+   حواف موحدة (12/8) · ظلال خفيفة · انتقالات 0.2s · أيقونات Lucide
+   الحالات: لون ثابت + نص + أيقونة (مش اعتماد على اللون وحده)
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --bg: #0B1520;
+  --surface: rgba(18, 31, 46, 0.92);
+  --surface-solid: #121F2E;
+  --surface2: rgba(28, 46, 66, 0.92);
+  --surface2-solid: #1C2E42;
+  --border: rgba(125, 175, 220, 0.18);
+  --border-strong: rgba(125, 175, 220, 0.32);
+  --primary: #5BB8E6;
+  --sky: #7CC8EE;
+  --accent: #5BB8E6;
+  --accent2: #2E8FCB;
+  --accent-glow: rgba(91, 184, 230, 0.2);
+  --text: #EAF1F8;
+  --muted: #93A7BA;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.25);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.25);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.35);
+  --st-done: #22C55E; --st-pending: #38BDF8; --st-emergency: #F87171;
+  --st-exception: #FBBF24; --st-internal: #2DD4BF; --st-deleted: #9CA3AF; --st-locked: #94A3B8;
+}
+body.light {
+  --bg: #F3F5F7;
+  --surface: #FFFFFF;
+  --surface-solid: #FFFFFF;
+  --surface2: #EEF2F6;
+  --surface2-solid: #EEF2F6;
+  --border: rgba(15, 60, 100, 0.12);
+  --border-strong: rgba(15, 60, 100, 0.22);
+  --primary: #0B4F8A;
+  --sky: #5BB8E6;
+  --accent: #0B4F8A;
+  --accent2: #083D6B;
+  --accent-glow: rgba(11, 79, 138, 0.15);
+  --text: #0F2233;
+  --muted: #5B6B7A;
+  --shadow-sm: 0 1px 2px rgba(15,34,51,.06);
+  --shadow-md: 0 2px 8px rgba(15,34,51,.07);
+  --shadow-lg: 0 8px 24px rgba(15,34,51,.10);
+  --st-done: #16A34A; --st-pending: #0284C7; --st-emergency: #DC2626;
+  --st-exception: #D97706; --st-internal: #0D9488; --st-deleted: #6B7280; --st-locked: #64748B;
+}
+
+/* أيقونات */
+.ic { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.18em; flex-shrink: 0; }
+.ic-lg { width: 22px; height: 22px; }
+.tools-item .ic { color: var(--accent); }
+.tools-item.danger .ic { color: var(--red); }
+.btn-admin .ic, .btn-print .ic, .fchip .ic { margin-inline-end: 2px; }
+
+/* انتقالات قصيرة وهادئة */
+button, .tools-item, .fchip, .case-card, .exam-badge, input, select, textarea, .status-chip {
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease, opacity .2s ease, transform .2s ease;
+}
+.case-card { transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease, transform .25s ease; }
+
+/* حواف موحدة + ظلال خفيفة */
+.case-card, body.light .case-card { border-radius: var(--radius) !important; }
+.modal { border-radius: 16px; box-shadow: var(--shadow-lg) !important; }
+.tools-menu { border-radius: 16px; box-shadow: var(--shadow-lg) !important; }
+.tools-item, .fchip, .btn-admin, .btn-print, .tb-btn, .search-box, .date-input, .form-input, .form-textarea { border-radius: var(--radius-sm) !important; }
+.fchip { border-radius: 999px !important; }
+
+/* الوضع الفاتح — ألوان موحدة بدل الألوان الثابتة القديمة */
+body.light header { background: #FFFFFF !important; border-bottom: 1px solid var(--border) !important; box-shadow: var(--shadow-sm) !important; }
+body.light .header-right h1 { color: var(--primary); }
+body.light .count-badge { background: #E6F4FB; border-color: rgba(91,184,230,.55); color: var(--primary); }
+body.light .toolbar { background: #FFFFFF !important; border-bottom: 1px solid var(--border) !important; }
+body.light .date-input, body.light .search-box, body.light .form-input, body.light .form-textarea { background: var(--surface2) !important; border-color: var(--border) !important; color: var(--text) !important; }
+body.light .date-bar { background: #E6F4FB !important; border-bottom: 1px solid rgba(91,184,230,.4) !important; color: var(--primary); }
+body.light .case-card { background: #FFFFFF !important; border: 1px solid var(--border) !important; box-shadow: var(--shadow-sm) !important; }
+body.light .case-card.locked-card, body.light .case-card.locked-card-sub, body.light .case-card.locked-card-admin { background: #F1F5F9 !important; border-color: #CBD5E1 !important; }
+body.light .case-card.done-card { background: #F4FBF6 !important; border-color: #BBE5C8 !important; }
+body.light .mobile-action-bar { background: #FFFFFF !important; border-top: 1px solid var(--border) !important; box-shadow: 0 -2px 8px rgba(15,34,51,.06) !important; }
+body.light .modal, body.light .pay-popup, body.light .stat-card, body.light .log-item, body.light table { background: #FFFFFF !important; border-color: var(--border) !important; }
+body.light .tools-menu { background: #FFFFFF !important; border-color: var(--border) !important; }
+body.light .tools-item, body.light .btn-admin, body.light .pay-btn { background: var(--surface2) !important; border-color: var(--border) !important; }
+body.light .tools-item:hover { background: #E6F4FB !important; border-color: var(--sky) !important; }
+body.light #toast { background: #FFFFFF !important; border-color: var(--border) !important; color: var(--text); box-shadow: var(--shadow-md); }
+body.light .exam-badge { background: #E6F4FB; border-color: rgba(91,184,230,.5); color: var(--primary); }
+body.light .card-num { background: var(--surface2); color: var(--text); }
+.btn-primary, .tb-btn.tb-primary, .btn-save { background: var(--primary) !important; color: #fff !important; border: none; box-shadow: var(--shadow-sm); }
+.btn-primary:hover, .tb-btn.tb-primary:hover { background: var(--accent2) !important; }
+body:not(.light) .btn-primary, body:not(.light) .tb-btn.tb-primary, body:not(.light) .btn-save { color: #06121F !important; }
+.exo-add button { background: var(--primary) !important; color: #fff !important; }
+body:not(.light) .exo-add button { color: #06121F !important; }
+body.light .fchip.active { background: #E6F4FB; color: var(--primary); border-color: var(--sky); }
+body.light .log-section { color: var(--text); }
+body.light .date-bar, body.light .toolbar { color: var(--text); }
+
+/* شارات الحالات: لون ثابت + أيقونة + نص */
+.status-chip, .case-type-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 8px; border: 1px solid transparent; white-space: nowrap; }
+.st-c-done    { color: #166534; background: #DCFCE7; border-color: #86EFAC; }
+.st-c-pending { color: #075985; background: #E0F2FE; border-color: #7DD3FC; }
+.st-c-locked  { color: #334155; background: #E2E8F0; border-color: #CBD5E1; }
+.st-c-deleted { color: #4B5563; background: #F3F4F6; border-color: #D1D5DB; }
+.type-emergency { color: #B91C1C; background: #FEE2E2; border-color: #FCA5A5; animation: none !important; }
+.type-internal  { color: #0F766E; background: #CCFBF1; border-color: #5EEAD4; }
+.type-exception { color: #B45309; background: #FEF3C7; border-color: #FCD34D; }
+body:not(.light) .st-c-done    { color: #86EFAC; background: rgba(34,197,94,.14);  border-color: rgba(34,197,94,.4); }
+body:not(.light) .st-c-pending { color: #7DD3FC; background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.4); }
+body:not(.light) .st-c-locked  { color: #CBD5E1; background: rgba(148,163,184,.14); border-color: rgba(148,163,184,.35); }
+body:not(.light) .st-c-deleted { color: #D1D5DB; background: rgba(156,163,175,.14); border-color: rgba(156,163,175,.35); }
+body:not(.light) .type-emergency { color: #FCA5A5; background: rgba(248,113,113,.14); border-color: rgba(248,113,113,.45); }
+body:not(.light) .type-internal  { color: #5EEAD4; background: rgba(45,212,191,.14);  border-color: rgba(45,212,191,.4); }
+body:not(.light) .type-exception { color: #FCD34D; background: rgba(251,191,36,.14);  border-color: rgba(251,191,36,.4); }
+.case-card .card-top > div[style*="flex-direction:column"] { align-items: flex-end; }
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -1595,6 +1710,7 @@ body.app-active .log-section { color: #fff; }
 </script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol><symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol><symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></symbol><symbol id="i-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol><symbol id="i-ruler" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></symbol><symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-xcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol><symbol id="i-megaphone" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-8z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol><symbol id="i-unlock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol><symbol id="i-card" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-filetext" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol></defs></svg>
 
 <!-- ══ LOGIN ══ -->
 <div id="loginScreen">
@@ -1610,12 +1726,12 @@ body.app-active .log-section { color: #fff; }
     <div id="adminLoginForm" style="display:none">
       <input type="text" id="adminUserInput" placeholder="اسم المستخدم" onkeydown="if(event.key==='Enter')document.getElementById('adminPassInput').focus()">
       <input type="password" id="adminPassInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="btn-primary" onclick="doLogin()" style="background:linear-gradient(135deg,#f59e0b,#d97706);margin-bottom:10px">🔐 دخول Admin</button>
+      <button class="btn-primary" onclick="doLogin()" style="background:linear-gradient(135deg,#f59e0b,#d97706);margin-bottom:10px"><svg class="ic"><use href="#i-lock"/></svg> دخول Admin</button>
       <button class="btn-switch-mode" onclick="switchToUser()">← رجوع لدخول المستخدم</button>
     </div>
-    <div class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</div>
+    <div class="login-error" id="loginError"><svg class="ic"><use href="#i-xcircle"/></svg> كلمة المرور غير صحيحة</div>
     <div id="adminSwitchRow" style="margin-top:16px">
-      <button class="btn-admin-login" onclick="switchToAdmin()">🔐 Admin</button>
+      <button class="btn-admin-login" onclick="switchToAdmin()"><svg class="ic"><use href="#i-lock"/></svg> Admin</button>
     </div>
   </div>
   <div class="app-version" dir="ltr">ver 26.11.11</div>
@@ -1635,7 +1751,7 @@ body.app-active .log-section { color: #fff; }
         <h1>🏥 MRI Booking</h1>
         <span id="adminLabel" style="display:none;font-size:18px;line-height:1;">👑</span>
       </div>
-      <div class="count-badge" id="countBadge">📋 <span id="headerCount">0</span> حالة</div>
+      <div class="count-badge" id="countBadge"><svg class="ic"><use href="#i-clipboard"/></svg> <span id="headerCount">0</span> حالة</div>
     </div>
     <div class="header-left">
       <button class="btn-tools" onclick="toggleToolsMenu()" id="toolsBtn" title="الأدوات">⚙️</button>
@@ -1653,7 +1769,7 @@ body.app-active .log-section { color: #fff; }
   <div class="tools-menu" id="toolsMenu">
     <div class="tools-menu-header">
       <span id="toolsMenuUserName"></span>
-      <button class="tools-close" onclick="closeToolsMenu()">✕</button>
+      <button class="tools-close" onclick="closeToolsMenu()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
 
     <!-- ملاحظات الأدمن — تظهر للكل -->
@@ -1663,68 +1779,68 @@ body.app-active .log-section { color: #fff; }
 
     <!-- Admin notice editor — أدمن فقط -->
     <div class="tools-section" id="noticeEditorSection" style="display:none">
-      <div class="tools-section-title">📢 تعليمات / ملاحظات</div>
+      <div class="tools-section-title"><svg class="ic"><use href="#i-megaphone"/></svg> تعليمات / ملاحظات</div>
       <textarea class="tools-notice-input" id="noticeInput" placeholder="اكتب تعليمات أو ملاحظات تظهر لكل المستخدمين..." rows="3"></textarea>
-      <button class="tools-save-notice" onclick="saveNotice()">💾 حفظ</button>
+      <button class="tools-save-notice" onclick="saveNotice()"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
     </div>
 
     <div class="tools-section" id="toolsAdminSection" style="display:none">
-      <div class="tools-section-title">🔐 الإدارة</div>
+      <div class="tools-section-title"><svg class="ic"><use href="#i-lock"/></svg> الإدارة</div>
 
       <div class="tools-group" data-group>
-        <div class="tools-group-title">👥 الأعضاء والمستخدمين</div>
+        <div class="tools-group-title"><svg class="ic"><use href="#i-users"/></svg> الأعضاء والمستخدمين</div>
         <div class="tools-grid">
-          <button class="tools-item" onclick="openMembersModal();closeToolsMenu()">👥<span>أعضاء</span></button>
-          <button class="tools-item" id="toolsDynUsersBtn" style="display:none" onclick="openDynUsersModal();closeToolsMenu()">👤<span>إضافة مستخدم</span></button>
-          <button class="tools-item" id="toolsSuperAdminBtn" style="display:none" onclick="openUserMgmtModal();closeToolsMenu()">🛡️<span>المستخدمين</span></button>
-          <button class="tools-item" id="toolsRulesBtn" style="display:none;background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)" onclick="openRulesModal();closeToolsMenu()">📏<span style="color:#a855f7">Rules</span></button>
+          <button class="tools-item" onclick="openMembersModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-users"/></svg><span>أعضاء</span></button>
+          <button class="tools-item" id="toolsDynUsersBtn" style="display:none" onclick="openDynUsersModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-userplus"/></svg><span>إضافة مستخدم</span></button>
+          <button class="tools-item" id="toolsSuperAdminBtn" style="display:none" onclick="openUserMgmtModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-shield"/></svg><span>المستخدمين</span></button>
+          <button class="tools-item" id="toolsRulesBtn" style="display:none;background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)" onclick="openRulesModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-ruler"/></svg><span style="color:#a855f7">Rules</span></button>
         </div>
       </div>
 
       <div class="tools-group" data-group>
-        <div class="tools-group-title">🗂️ الفحوصات</div>
+        <div class="tools-group-title"><svg class="ic"><use href="#i-clipboard"/></svg> الفحوصات</div>
         <div class="tools-grid">
-          <button class="tools-item" onclick="openExamOrgModal();closeToolsMenu()">🗂️<span>تنظيم الفحوصات</span></button>
-          <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="toggleFavFeature()">⭐<span id="toolsFavState" style="color:#fbbf24">المفضلة</span></button>
+          <button class="tools-item" onclick="openExamOrgModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-clipboard"/></svg><span>تنظيم الفحوصات</span></button>
+          <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="toggleFavFeature()"><svg class="ic ic-lg"><use href="#i-star"/></svg><span id="toolsFavState" style="color:#fbbf24">المفضلة</span></button>
         </div>
       </div>
 
       <div class="tools-group" data-group>
-        <div class="tools-group-title">📊 التقارير والمتابعة</div>
+        <div class="tools-group-title"><svg class="ic"><use href="#i-chart"/></svg> التقارير والمتابعة</div>
         <div class="tools-grid">
-          <button class="tools-item" onclick="openStatsModal();closeToolsMenu()">📊<span>إحصائيات</span></button>
-          <button class="tools-item" onclick="openHistoryModal();closeToolsMenu()">📜<span>History</span></button>
-          <button class="tools-item" id="toolsFbUsageBtn" style="display:none" onclick="openFbUsageModal();closeToolsMenu()">📡<span>Firebase</span></button>
+          <button class="tools-item" onclick="openStatsModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-chart"/></svg><span>إحصائيات</span></button>
+          <button class="tools-item" onclick="openHistoryModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-history"/></svg><span>History</span></button>
+          <button class="tools-item" id="toolsFbUsageBtn" style="display:none" onclick="openFbUsageModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-activity"/></svg><span>Firebase</span></button>
         </div>
       </div>
 
       <div class="tools-group" data-group>
-        <div class="tools-group-title">💾 البيانات (إدخال / تصدير)</div>
+        <div class="tools-group-title"><svg class="ic"><use href="#i-save"/></svg> البيانات (إدخال / تصدير)</div>
         <div class="tools-grid">
-          <button class="tools-item" onclick="openBulkModal();closeToolsMenu()">📋<span>دفعة</span></button>
-          <button class="tools-item" onclick="exportCSV();closeToolsMenu()">📥<span>CSV</span></button>
-          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openJsonExportModal();closeToolsMenu()">📤<span style="color:#22c55e">JSON تصدير</span></button>
-          <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="openJsonImportModal();closeToolsMenu()">📥<span style="color:#fbbf24">JSON استيراد</span></button>
+          <button class="tools-item" onclick="openBulkModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-clipboard"/></svg><span>دفعة</span></button>
+          <button class="tools-item" onclick="exportCSV();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-download"/></svg><span>CSV</span></button>
+          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openJsonExportModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-upload"/></svg><span style="color:#22c55e">JSON تصدير</span></button>
+          <button class="tools-item" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)" onclick="openJsonImportModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-download"/></svg><span style="color:#fbbf24">JSON استيراد</span></button>
         </div>
       </div>
 
       <div class="tools-group" data-group>
-        <div class="tools-group-title" style="color:var(--red)">⚠️ منطقة الخطر</div>
+        <div class="tools-group-title" style="color:var(--red)"><svg class="ic"><use href="#i-alert"/></svg> منطقة الخطر</div>
         <div class="tools-grid">
-          <button class="tools-item danger wide" onclick="clearAllCases();closeToolsMenu()">🗑️<span>مسح الكل</span></button>
+          <button class="tools-item danger wide" onclick="clearAllCases();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-trash"/></svg><span>مسح الكل</span></button>
         </div>
       </div>
     </div>
 
     <div class="tools-section" id="toolsUserSection">
       <div class="tools-group" data-group>
-        <div class="tools-group-title">📅 اليوم</div>
+        <div class="tools-group-title"><svg class="ic"><use href="#i-calendar"/></svg> اليوم</div>
         <div class="tools-grid">
-          <button class="tools-item" id="toolsConfirmDayBtn" onclick="confirmDayBooking();closeToolsMenu()" style="display:none;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">✅<span>تأكيد اليوم</span></button>
-          <button class="tools-item" id="toolsEndDayBtn" onclick="endTechDay();closeToolsMenu()" style="display:none;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🏁<span>إنهاء اليوم</span></button>
-          <button class="tools-item" id="toolsConsumablesBtn" onclick="openConsumablesModal();closeToolsMenu()" style="display:none;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.35)">🎬<span style="color:#fbbf24">مستهلكات</span></button>
-          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()">🖨️<span style="color:#22c55e">طباعة</span></button>
-          <button class="tools-item" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3)" onclick="shareWhatsAppSummary();closeToolsMenu()">📲<span style="color:#25d366">واتساب</span></button>
+          <button class="tools-item" id="toolsConfirmDayBtn" onclick="confirmDayBooking();closeToolsMenu()" style="display:none;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)"><svg class="ic ic-lg"><use href="#i-check"/></svg><span>تأكيد اليوم</span></button>
+          <button class="tools-item" id="toolsEndDayBtn" onclick="endTechDay();closeToolsMenu()" style="display:none;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)"><svg class="ic ic-lg"><use href="#i-flag"/></svg><span>إنهاء اليوم</span></button>
+          <button class="tools-item" id="toolsConsumablesBtn" onclick="openConsumablesModal();closeToolsMenu()" style="display:none;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.35)"><svg class="ic ic-lg"><use href="#i-clipboard"/></svg><span style="color:#fbbf24">مستهلكات</span></button>
+          <button class="tools-item" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)" onclick="openPrintSheetModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-printer"/></svg><span style="color:#22c55e">طباعة</span></button>
+          <button class="tools-item" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3)" onclick="shareWhatsAppSummary();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-message"/></svg><span style="color:#25d366">واتساب</span></button>
         </div>
       </div>
 
@@ -1732,8 +1848,8 @@ body.app-active .log-section { color: #fff; }
         <div class="tools-group-title">⚙️ عام</div>
         <div class="tools-grid">
           <button class="tools-item" onclick="toggleTheme();closeToolsMenu()" id="toolsThemeBtn">🌙<span>المظهر</span></button>
-          <button class="tools-item" onclick="doRefresh();closeToolsMenu()">🔄<span>تحديث</span></button>
-          <button class="tools-item" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3)" onclick="openGuideModal();closeToolsMenu()">📖<span style="color:var(--accent)">دليل</span></button>
+          <button class="tools-item" onclick="doRefresh();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-refresh"/></svg><span>تحديث</span></button>
+          <button class="tools-item" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3)" onclick="openGuideModal();closeToolsMenu()"><svg class="ic ic-lg"><use href="#i-book"/></svg><span style="color:var(--accent)">دليل</span></button>
         </div>
       </div>
     </div>
@@ -1744,7 +1860,7 @@ body.app-active .log-section { color: #fff; }
     <span class="admin-toolbar-label">👑 <span id="adminToolbarName"></span></span>
     <span style="font-size:11px;color:var(--yellow);opacity:.7;margin-right:4px">— وضع الأدمن</span>
     <button class="btn-admin" id="moveSelBtn" onclick="toggleMoveMode()" style="color:var(--accent);border-color:rgba(96,165,250,.45)">🔀 تحديد ونقل</button>
-    <button class="btn-admin" id="adminUnlockDayBtn" onclick="adminUnlockDay()" style="display:none;color:var(--green);border-color:rgba(52,211,153,.4)">🔓 تنشيط اليوم</button>
+    <button class="btn-admin" id="adminUnlockDayBtn" onclick="adminUnlockDay()" style="display:none;color:var(--green);border-color:rgba(52,211,153,.4)"><svg class="ic"><use href="#i-unlock"/></svg> تنشيط اليوم</button>
   </div>
 
   <!-- NOTICE BANNER -->
@@ -1752,25 +1868,25 @@ body.app-active .log-section { color: #fff; }
 
   <div class="toolbar">
     <input type="date" id="examDatePicker" class="date-input" onchange="updateExamDate()">
-    <input type="text" class="search-box" id="searchInput" placeholder="🔍 بحث..." oninput="renderAll()">
+    <input type="text" class="search-box" id="searchInput" placeholder="بحث..." oninput="renderAll()">
     <div class="toolbar-actions">
-      <button class="btn-admin tb-btn" id="toggleRangeBtn" onclick="toggleDateRange()">📅 نطاق</button>
-      <button class="btn-print tb-btn" id="userPrintBtn" onclick="openPrintSheetModal()" style="display:none">🖨️ طباعة</button>
-      <button class="btn-add desktop-add-btn tb-btn tb-primary" onclick="openAddModal()">➕ إضافة</button>
+      <button class="btn-admin tb-btn" id="toggleRangeBtn" onclick="toggleDateRange()"><svg class="ic"><use href="#i-calendar"/></svg> نطاق</button>
+      <button class="btn-print tb-btn" id="userPrintBtn" onclick="openPrintSheetModal()" style="display:none"><svg class="ic"><use href="#i-printer"/></svg> طباعة</button>
+      <button class="btn-add desktop-add-btn tb-btn tb-primary" onclick="openAddModal()"><svg class="ic"><use href="#i-plus"/></svg> إضافة</button>
     </div>
   </div>
 
   <div class="filter-bar" id="filterBar">
     <button class="fchip active" data-g="status" data-v="all">الكل</button>
-    <button class="fchip" data-g="status" data-v="done">✅ منجزة</button>
-    <button class="fchip" data-g="status" data-v="pending">⏳ متبقية</button>
+    <button class="fchip" data-g="status" data-v="done"><svg class="ic"><use href="#i-check"/></svg> منجزة</button>
+    <button class="fchip" data-g="status" data-v="pending"><svg class="ic"><use href="#i-clock"/></svg> متبقية</button>
     <span class="fsep"></span>
     <button class="fchip active" data-g="type" data-v="all">كل الأنواع</button>
     <button class="fchip" data-g="type" data-v="normal">عادي</button>
     <button class="fchip" data-g="type" data-v="internal">داخلي</button>
-    <button class="fchip" data-g="type" data-v="emergency">🚨 طوارئ</button>
+    <button class="fchip" data-g="type" data-v="emergency"><svg class="ic"><use href="#i-alert"/></svg> طوارئ</button>
     <button class="fchip" data-g="type" data-v="exception">استثناء</button>
-    <button class="fchip clear" id="fClear">✕ مسح الفلاتر</button>
+    <button class="fchip clear" id="fClear"><svg class="ic"><use href="#i-x"/></svg> مسح الفلاتر</button>
   </div>
 
   <!-- Date Range Search -->
@@ -1780,18 +1896,18 @@ body.app-active .log-section { color: #fff; }
     <span class="range-sep">←</span>
     <label>إلى:</label>
     <input type="date" id="rangeTo" class="date-input" style="padding:6px 10px;font-size:13px">
-    <button class="btn-range-search" onclick="searchDateRange()">🔍 بحث</button>
-    <button class="btn-range-clear" onclick="clearDateRange()">✕ مسح</button>
-    <button class="btn-range-search" id="dupScanBtn" style="display:none" onclick="scanDuplicates()">🔁 فحص التكرار</button>
+    <button class="btn-range-search" onclick="searchDateRange()"><svg class="ic"><use href="#i-search"/></svg> بحث</button>
+    <button class="btn-range-clear" onclick="clearDateRange()"><svg class="ic"><use href="#i-x"/></svg> مسح</button>
+    <button class="btn-range-search" id="dupScanBtn" style="display:none" onclick="scanDuplicates()"><svg class="ic"><use href="#i-refresh"/></svg> فحص التكرار</button>
   </div>
 
   <!-- Range results banner -->
   <div class="range-results-bar" id="rangeResultsBar">
     <span id="rangeResultsText"></span>
-    <button class="btn-range-clear" onclick="clearDateRange()">✕ إغلاق</button>
+    <button class="btn-range-clear" onclick="clearDateRange()"><svg class="ic"><use href="#i-x"/></svg> إغلاق</button>
   </div>
 
-  <div class="date-bar">📅 <span id="examDateDisplay">—</span></div>
+  <div class="date-bar"><svg class="ic"><use href="#i-calendar"/></svg> <span id="examDateDisplay">—</span></div>
 
   <!-- DESKTOP TABLE -->
   <div class="table-wrapper">
@@ -1826,15 +1942,15 @@ body.app-active .log-section { color: #fff; }
 
   <!-- MOBILE ACTION BAR -->
   <div class="mobile-action-bar" id="mobileActionBar" style="display:none">
-    <button class="mob-btn-add" id="mobAddBtn" onclick="handleMobAdd()">➕ إضافة حالة</button>
-    <button class="mob-btn-bulk" id="mobBulkBtn" onclick="openBulkModal()" style="display:none">📋 دفعة</button>
-    <button id="mobConfirmDayBtn" onclick="confirmDayBooking()" style="display:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">✅ تأكيد</button>
-    <button id="mobEndDayBtn" onclick="endTechDay()" style="display:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer">🏁 إنهاء اليوم</button>
+    <button class="mob-btn-add" id="mobAddBtn" onclick="handleMobAdd()"><svg class="ic"><use href="#i-plus"/></svg> إضافة حالة</button>
+    <button class="mob-btn-bulk" id="mobBulkBtn" onclick="openBulkModal()" style="display:none"><svg class="ic"><use href="#i-clipboard"/></svg> دفعة</button>
+    <button id="mobConfirmDayBtn" onclick="confirmDayBooking()" style="display:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer"><svg class="ic"><use href="#i-check"/></svg> تأكيد</button>
+    <button id="mobEndDayBtn" onclick="endTechDay()" style="display:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;border-radius:var(--radius);padding:10px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer"><svg class="ic"><use href="#i-flag"/></svg> إنهاء اليوم</button>
   </div>
 
   <div class="log-section" id="logSection">
     <div class="log-header">
-      <h3>📋 سجل العمليات</h3>
+      <h3><svg class="ic"><use href="#i-clipboard"/></svg> سجل العمليات</h3>
       <button class="btn-clear-log" id="clearLogBtn" onclick="clearLog()" style="display:none">مسح السجل</button>
     </div>
     <div class="log-list" id="logList"></div>
@@ -1846,7 +1962,7 @@ body.app-active .log-section { color: #fff; }
   <div class="modal">
     <div class="modal-header">
       <h3 id="modalTitle">إضافة حالة جديدة</h3>
-      <button class="btn-close" onclick="closeCaseModal()">✕</button>
+      <button class="btn-close" onclick="closeCaseModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div class="form-group">
       <label>اسم الحالة *</label>
@@ -1860,10 +1976,10 @@ body.app-active .log-section { color: #fff; }
     <div id="f_type_row" class="form-group" style="display:none">
       <label>نوع الحالة</label>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button type="button" class="fab-type-btn fab-normal"    style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('normal')"    id="typeBtn_normal">📋 عادي</button>
-        <button type="button" class="fab-type-btn fab-emergency" style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('emergency')" id="typeBtn_emergency">🚨 طوارئ</button>
+        <button type="button" class="fab-type-btn fab-normal"    style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('normal')"    id="typeBtn_normal"><svg class="ic"><use href="#i-clipboard"/></svg> عادي</button>
+        <button type="button" class="fab-type-btn fab-emergency" style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('emergency')" id="typeBtn_emergency"><svg class="ic"><use href="#i-alert"/></svg> طوارئ</button>
         <button type="button" class="fab-type-btn fab-internal"  style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('internal')"  id="typeBtn_internal">🏥 داخلي</button>
-        <button type="button" class="fab-type-btn fab-exception" style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('exception')" id="typeBtn_exception">⭐ استثناء</button>
+        <button type="button" class="fab-type-btn fab-exception" style="font-size:12px;padding:7px 12px;border-radius:8px;box-shadow:none" onclick="setModalCaseType('exception')" id="typeBtn_exception"><svg class="ic"><use href="#i-star"/></svg> استثناء</button>
       </div>
     </div>
     <div class="form-row">
@@ -1895,7 +2011,7 @@ body.app-active .log-section { color: #fff; }
       <textarea class="form-textarea" id="f_notes" placeholder="أي ملاحظات إضافية..."></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveCase()">💾 حفظ</button>
+      <button class="btn-save" onclick="saveCase()"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
       <button class="btn-cancel" onclick="closeCaseModal()">إلغاء</button>
     </div>
   </div>
@@ -1906,12 +2022,12 @@ body.app-active .log-section { color: #fff; }
   <div class="modal confirm-modal">
     <div class="modal-header">
       <h3>تأكيد الحذف النهائي</h3>
-      <button class="btn-close" onclick="closeDeleteModal()">✕</button>
+      <button class="btn-close" onclick="closeDeleteModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
-    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-icon"><svg class="ic"><use href="#i-trash"/></svg></div>
     <p>هل أنت متأكد من الحذف النهائي لهذه الحالة؟<br><span style="color:var(--red);font-size:12px">لا يمكن التراجع عن هذا الإجراء.</span></p>
     <div class="modal-footer">
-      <button class="btn-save" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="confirmDelete()">🗑️ حذف نهائي</button>
+      <button class="btn-save" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="confirmDelete()"><svg class="ic"><use href="#i-trash"/></svg> حذف نهائي</button>
       <button class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
     </div>
   </div>
@@ -1921,17 +2037,17 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay delete-reason-modal" id="softDeleteModal" style="display:none" onclick="if(event.target===this)closeSoftDeleteModal()">
   <div class="modal confirm-modal">
     <div class="modal-header">
-      <h3>🗑️ حذف الحالة</h3>
-      <button class="btn-close" onclick="closeSoftDeleteModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-trash"/></svg> حذف الحالة</h3>
+      <button class="btn-close" onclick="closeSoftDeleteModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
-    <div class="confirm-icon" style="font-size:32px">📝</div>
+    <div class="confirm-icon" style="font-size:32px"><svg class="ic"><use href="#i-filetext"/></svg></div>
     <p style="margin-bottom:14px">اكتب سبب الحذف — ستختفي الحالة من الشاشة لكن الأدمن سيراها.</p>
     <div class="form-group">
       <label>سبب الحذف *</label>
       <textarea class="form-textarea" id="softDeleteReason" placeholder="مثال: مريض أُلغي موعده، خطأ في الإدخال..." style="min-height:90px"></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-save" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="confirmSoftDelete()">🗑️ حذف</button>
+      <button class="btn-save" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="confirmSoftDelete()"><svg class="ic"><use href="#i-trash"/></svg> حذف</button>
       <button class="btn-cancel" onclick="closeSoftDeleteModal()">إلغاء</button>
     </div>
   </div>
@@ -1941,10 +2057,10 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="examOrgModal" style="display:none" onclick="if(event.target===this)closeExamOrgModal()">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <h3>🗂️ تنظيم الفحوصات</h3>
-      <button class="btn-close" onclick="closeExamOrgModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-clipboard"/></svg> تنظيم الفحوصات</h3>
+      <button class="btn-close" onclick="closeExamOrgModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
-    <label class="exo-fav-toggle"><input type="checkbox" id="exoFavEnabled" onchange="toggleFavFeature(this.checked)"> ⭐ تفعيل المفضلة (الفحوصات المنجّمة تظهر في مقدمة القائمة)</label>
+    <label class="exo-fav-toggle"><input type="checkbox" id="exoFavEnabled" onchange="toggleFavFeature(this.checked)"> <svg class="ic"><use href="#i-star"/></svg> تفعيل المفضلة (الفحوصات المنجّمة تظهر في مقدمة القائمة)</label>
     <div class="exo-add">
       <input type="text" id="exoName" placeholder="➕ اسم فحص جديد" onkeydown="if(event.key==='Enter')exoAdd()">
       <select id="exoGroup"></select>
@@ -1963,12 +2079,12 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="statsModal" style="display:none" onclick="if(event.target===this)closeStatsModal()">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <h3>📊 إحصائيات</h3>
-      <button class="btn-close" onclick="closeStatsModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-chart"/></svg> إحصائيات</h3>
+      <button class="btn-close" onclick="closeStatsModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div id="statsContent"></div>
     <div class="modal-footer">
-      <button class="btn-pdf" onclick="exportPDF()">🖨️ PDF المنجز</button>
+      <button class="btn-pdf" onclick="exportPDF()"><svg class="ic"><use href="#i-printer"/></svg> PDF المنجز</button>
       <button class="btn-cancel" onclick="closeStatsModal()">إغلاق</button>
     </div>
   </div>
@@ -1978,8 +2094,8 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="editNameModal" style="display:none" onclick="if(event.target===this)closeEditNameModal()">
   <div class="modal">
     <div class="modal-header">
-      <h3>✎ تعديل الحالة</h3>
-      <button class="btn-close" onclick="closeEditNameModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-pencil"/></svg> تعديل الحالة</h3>
+      <button class="btn-close" onclick="closeEditNameModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div class="form-group">
       <label>اسم الحالة *</label>
@@ -2010,7 +2126,7 @@ body.app-active .log-section { color: #fff; }
       </label>
     </div>
     <div class="form-group">
-      <label>💳 الدفع</label>
+      <label><svg class="ic"><use href="#i-card"/></svg> الدفع</label>
       <input type="text" class="form-input" id="en_payment" placeholder="مثال: إيصال، تأمين، 500..." autocomplete="off">
     </div>
     <div class="form-group">
@@ -2023,7 +2139,7 @@ body.app-active .log-section { color: #fff; }
       <textarea class="form-textarea" id="en_notes" placeholder="أي ملاحظات إضافية..."></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveEditName()">💾 حفظ</button>
+      <button class="btn-save" onclick="saveEditName()"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
       <button class="btn-cancel" onclick="closeEditNameModal()">إلغاء</button>
     </div>
   </div>
@@ -2033,12 +2149,12 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="fbUsageOverlay" style="display:none" onclick="if(event.target===this)closeFbUsageModal()">
   <div class="modal" style="max-width:420px">
     <div class="modal-header">
-      <span class="modal-title">📡 استهلاك Firebase اليومي</span>
-      <button class="modal-close" onclick="closeFbUsageModal()">✕</button>
+      <span class="modal-title"><svg class="ic"><use href="#i-activity"/></svg> استهلاك Firebase اليومي</span>
+      <button class="modal-close" onclick="closeFbUsageModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div id="fbUsageContent" style="padding:4px 0"></div>
     <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
-      <button onclick="resetFbUsageToday()" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:var(--red);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;cursor:pointer">🗑️ تصفير اليوم</button>
+      <button onclick="resetFbUsageToday()" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:var(--red);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;cursor:pointer"><svg class="ic"><use href="#i-trash"/></svg> تصفير اليوم</button>
       <button onclick="closeFbUsageModal()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;cursor:pointer">إغلاق</button>
     </div>
   </div>
@@ -2048,19 +2164,19 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="dynUsersModal" style="display:none" onclick="if(event.target===this)closeDynUsersModal()">
   <div class="modal" style="max-width:540px">
     <div class="modal-header">
-      <h3>👤 إدارة المستخدمين</h3>
-      <button class="btn-close" onclick="closeDynUsersModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-user"/></svg> إدارة المستخدمين</h3>
+      <button class="btn-close" onclick="closeDynUsersModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px">أضف مستخدمين ديناميكيين وحدد صلاحياتهم — يُحفظ في Firebase</p>
 
     <!-- قائمة المستخدمين الديناميكيين -->
     <div id="dynUsersList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:300px;overflow-y:auto"></div>
 
-    <button onclick="openAddDynUserPanel()" style="width:100%;background:rgba(96,165,250,.1);border:1px dashed rgba(96,165,250,.4);color:var(--accent);border-radius:var(--radius);padding:10px;font-family:inherit;font-size:14px;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(96,165,250,.18)'" onmouseout="this.style.background='rgba(96,165,250,.1)'">➕ إضافة مستخدم جديد</button>
+    <button onclick="openAddDynUserPanel()" style="width:100%;background:rgba(96,165,250,.1);border:1px dashed rgba(96,165,250,.4);color:var(--accent);border-radius:var(--radius);padding:10px;font-family:inherit;font-size:14px;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(96,165,250,.18)'" onmouseout="this.style.background='rgba(96,165,250,.1)'"><svg class="ic"><use href="#i-plus"/></svg> إضافة مستخدم جديد</button>
 
     <!-- panel إضافة/تعديل -->
     <div id="dynUserEditPanel" style="display:none;margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
-      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px" id="dynPanelTitle">➕ مستخدم جديد</div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px" id="dynPanelTitle"><svg class="ic"><use href="#i-plus"/></svg> مستخدم جديد</div>
       <input type="hidden" id="dyn_edit_id">
       <div class="form-group">
         <label>الاسم الظاهر *</label>
@@ -2078,8 +2194,8 @@ body.app-active .log-section { color: #fff; }
         <label>الدور</label>
         <select class="form-input" id="dyn_role" onchange="onDynRoleChange()">
           <option value="tech">🔧 فني</option>
-          <option value="secretary">🗂️ سكرتارية / تسجيل</option>
-          <option value="admin">🛡️ أدمن</option>
+          <option value="secretary">سكرتارية / تسجيل</option>
+          <option value="admin">أدمن</option>
         </select>
       </div>
       <!-- صلاحيات السكرتارية -->
@@ -2095,7 +2211,7 @@ body.app-active .log-section { color: #fff; }
         </div>
       </div>
       <div style="display:flex;gap:8px">
-        <button class="btn-save" onclick="saveDynUser()" style="flex:1">💾 حفظ</button>
+        <button class="btn-save" onclick="saveDynUser()" style="flex:1"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
         <button class="btn-cancel" onclick="closeDynUserPanel()" style="flex:1">إلغاء</button>
       </div>
     </div>
@@ -2106,8 +2222,8 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="userMgmtModal" style="display:none" onclick="if(event.target===this)closeUserMgmtModal()">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <h3>🛡️ إدارة المستخدمين</h3>
-      <button class="btn-close" onclick="closeUserMgmtModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-shield"/></svg> إدارة المستخدمين</h3>
+      <button class="btn-close" onclick="closeUserMgmtModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px">تعديل بيانات الدخول لجميع المستخدمين</p>
     <!-- Tabs -->
@@ -2129,7 +2245,7 @@ body.app-active .log-section { color: #fff; }
     <div id="umPanel_u6" style="display:none"><div class="form-group"><label>الاسم الظاهر</label><input type="text" class="form-input" id="um_u6_name"></div><div class="form-group"><label>Username</label><input type="text" class="form-input" id="um_u6_uname" dir="ltr" autocomplete="off"></div><div class="form-group"><label>كلمة المرور الجديدة <span style="color:var(--muted);font-size:11px">(فارغة = لا تغيير)</span></label><input type="password" class="form-input" id="um_u6_pass" autocomplete="new-password"></div></div>
     <div id="umPanel_u8" style="display:none"><div class="form-group"><label>الاسم الظاهر</label><input type="text" class="form-input" id="um_u8_name"></div><div class="form-group"><label>Username</label><input type="text" class="form-input" id="um_u8_uname" dir="ltr" autocomplete="off"></div><div class="form-group"><label>كلمة المرور الجديدة <span style="color:var(--muted);font-size:11px">(فارغة = لا تغيير)</span></label><input type="password" class="form-input" id="um_u8_pass" autocomplete="new-password"></div></div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveUserMgmt()">💾 حفظ</button>
+      <button class="btn-save" onclick="saveUserMgmt()"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
       <button class="btn-cancel" onclick="closeUserMgmtModal()">إلغاء</button>
     </div>
   </div>
@@ -2139,15 +2255,15 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="rulesModal" style="display:none" onclick="if(event.target===this)closeRulesModal()">
   <div class="modal" style="max-width:480px">
     <div class="modal-header">
-      <h3>📏 Rules — يوم العمل</h3>
-      <button class="btn-close" onclick="closeRulesModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-ruler"/></svg> Rules — يوم العمل</h3>
+      <button class="btn-close" onclick="closeRulesModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px">
       لو فعّلت القاعدة لمستخدم وحددت أيام عمله، هيقدر يضيف/يعدّل/يحذف حالاته بس في الأيام دي. أما في باقي الأيام: يقدر يشوف الحالات بس مش يعدّل أو يضيف أو يمسح.
     </p>
     <div id="rulesListContainer"></div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveDateRules()">💾 حفظ</button>
+      <button class="btn-save" onclick="saveDateRules()"><svg class="ic"><use href="#i-save"/></svg> حفظ</button>
       <button class="btn-cancel" onclick="closeRulesModal()">إلغاء</button>
     </div>
   </div>
@@ -2156,8 +2272,8 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="membersModal" style="display:none" onclick="if(event.target===this)closeMembersModal()">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <h3>👥 أعضاء التسجيل</h3>
-      <button class="btn-close" onclick="closeMembersModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-users"/></svg> أعضاء التسجيل</h3>
+      <button class="btn-close" onclick="closeMembersModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:16px">تحكم في إعدادات مستخدم ١ ومستخدم ٢</p>
     <div style="display:flex;gap:6px;margin-bottom:18px">
@@ -2191,7 +2307,7 @@ body.app-active .log-section { color: #fff; }
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveMembersSettings()">💾 حفظ الإعدادات</button>
+      <button class="btn-save" onclick="saveMembersSettings()"><svg class="ic"><use href="#i-save"/></svg> حفظ الإعدادات</button>
       <button class="btn-cancel" onclick="closeMembersModal()">إلغاء</button>
     </div>
   </div>
@@ -2202,16 +2318,16 @@ body.app-active .log-section { color: #fff; }
 <div id="moveBar">
   <span class="mv-count" id="mvCount">0 محددة</span>
   <button onclick="moveSelectAll()">الكل</button>
-  <button class="mv-go" id="mvGoBtn" onclick="openMoveModal()" disabled>📅 نقل</button>
-  <button onclick="exitMoveMode()">✕</button>
+  <button class="mv-go" id="mvGoBtn" onclick="openMoveModal()" disabled><svg class="ic"><use href="#i-calendar"/></svg> نقل</button>
+  <button onclick="exitMoveMode()"><svg class="ic"><use href="#i-x"/></svg></button>
 </div>
 
 <!-- MOVE MODAL -->
 <div class="modal-overlay" id="moveModal" style="display:none" onclick="if(event.target===this)closeMoveModal()">
   <div class="modal" style="max-width:420px">
     <div class="modal-header">
-      <h3>📅 نقل الحالات لليوم</h3>
-      <button class="btn-close" onclick="closeMoveModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-calendar"/></svg> نقل الحالات لليوم</h3>
+      <button class="btn-close" onclick="closeMoveModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div id="mvModalInfo" style="font-size:13px;color:var(--muted);margin-bottom:12px"></div>
     <div class="mvcal-nav">
@@ -2230,8 +2346,8 @@ body.app-active .log-section { color: #fff; }
 <div class="modal-overlay" id="bulkModal" style="display:none" onclick="if(event.target===this)closeBulkModal()">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <h3>📋 إضافة حالات دفعة واحدة</h3>
-      <button class="btn-close" onclick="closeBulkModal()">✕</button>
+      <h3><svg class="ic"><use href="#i-clipboard"/></svg> إضافة حالات دفعة واحدة</h3>
+      <button class="btn-close" onclick="closeBulkModal()"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <span style="font-size:13px;color:var(--muted)">أضف أسماء المرضى والفحوصات معاً</span>
@@ -2239,13 +2355,13 @@ body.app-active .log-section { color: #fff; }
     </div>
     <div class="bulk-header-row"><span>اسم المريض *</span><span>الفحص *</span><span></span></div>
     <div id="bulkRowsList"></div>
-    <button class="btn-bulk-add-row" onclick="addBulkRow()">➕ إضافة سطر جديد</button>
+    <button class="btn-bulk-add-row" onclick="addBulkRow()"><svg class="ic"><use href="#i-plus"/></svg> إضافة سطر جديد</button>
     <div style="margin-bottom:14px">
       <label>ملاحظات مشتركة (اختياري)</label>
       <textarea class="form-textarea" id="bulk_notes" placeholder="تطبق على كل الحالات..." style="min-height:60px"></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-save" onclick="saveBulkCases()">💾 حفظ الكل</button>
+      <button class="btn-save" onclick="saveBulkCases()"><svg class="ic"><use href="#i-save"/></svg> حفظ الكل</button>
       <button class="btn-cancel" onclick="closeBulkModal()">إلغاء</button>
     </div>
   </div>
@@ -2255,11 +2371,11 @@ body.app-active .log-section { color: #fff; }
 
 <script>
 // ══ THEME ══════════════════════════════════════════════════════════════════
-let isDark = localStorage.getItem('mriTheme') !== 'light';
+let isDark = localStorage.getItem('mriTheme') === 'dark'; // الافتراضي: الوضع الفاتح حسب هوية التصميم
 function applyTheme() {
   document.body.classList.toggle('light', !isDark);
   const tb = document.getElementById('themeBtn'); if(tb) tb.textContent = isDark ? '🌙' : '☀️';
-  document.getElementById('themeColorMeta').content = '#004B93';
+  document.getElementById('themeColorMeta').content = isDark ? '#0B1520' : '#0B4F8A';
 }
 function toggleTheme() {
   isDark = !isDark;
@@ -2595,6 +2711,8 @@ const EXAM_LABELS = {
   'رنين على الناسور الشرجى / العصعصى Fistula': 'رنين على الناسور الشرجى / العصعصى (Fistula)',
 };
 // \u200F = علامة اتجاه يمين-لشمال عشان الترتيب ما يتلخبطش مع الإنجليزي
+// أيقونات Lucide الموحدة (من الـ sprite أعلى الصفحة)
+function ic(name, extra) { return `<svg class="ic ${extra||''}" aria-hidden="true"><use href="#i-${name}"/></svg>`; }
 function examLabel(v) { return '\u200F' + (EXAM_LABELS[v] || v); }
 
 // ══ تنظيم الفحوصات (أدمن): مفضلة + إضافة + إخفاء/مسح ═══════════════════════
@@ -3528,6 +3646,10 @@ function renderTable(data) {
         <td class="serial-num">${isDeleted ? '🗑️' : (i+1)}</td>
         <td>
           <strong style="${(done||isDeleted)?'text-decoration:line-through;opacity:.6':''}">${escHtml(c.name)}</strong>
+          <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">${isDeleted
+            ? `<span class="status-chip st-c-deleted">${ic('trash')} محذوفة</span>`
+            : (done ? `<span class="status-chip st-c-done">${ic('check')} منجزة</span>` : `<span class="status-chip st-c-pending">${ic('clock')} متبقية</span>`)
+              + (locked ? `<span class="status-chip st-c-locked">${ic('lock')} مقفولة</span>` : '')}</div>
           ${isDeleted ? `<div class="no-strike" style="font-size:10px;color:var(--red);margin-top:2px">📝 ${escHtml(c.deleteReason||'—')} · ${escHtml(c.deletedBy||'')} · ${c.deletedAt?formatTime(c.deletedAt):''}</div>` : getCaseTypeBadge(c.caseType)}
           ${!isDeleted && c.nid    ? `<div style="font-size:10px;color:var(--muted);direction:ltr;margin-top:2px">🪪 ${escHtml(c.nid)}</div>` : ''}
           ${!isDeleted && c.mobile ? `<div style="font-size:10px;color:var(--muted);direction:ltr">📱 ${escHtml(c.mobile)}</div>` : ''}
@@ -3674,7 +3796,12 @@ function renderCards(data) {
               ${(c.age) ? `<span style="font-size:11px;color:var(--muted)">🎂 ${escHtml(String(c.age))} سنة</span>` : ''}
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-              ${isDeleted ? '<span class="deleted-badge">🗑️ محذوفة</span>' : getCaseTypeBadge(c.caseType)}
+              ${isDeleted
+                ? `<span class="status-chip st-c-deleted">${ic('trash')} محذوفة</span>`
+                : (done ? `<span class="status-chip st-c-done">${ic('check')} منجزة</span>`
+                        : `<span class="status-chip st-c-pending">${ic('clock')} متبقية</span>`)
+                  + ((isAdmin && (dayLocked || c.techLockedBy)) || locked ? `<span class="status-chip st-c-locked">${ic('lock')} مقفولة</span>` : '')
+                  + getCaseTypeBadge(c.caseType)}
               ${c.contrast && !isDeleted ? '<span class="contrast-chip-yes">💉 صبغة</span>' : ''}
             </div>
             <div class="card-move-btns">${moveBtnsHtml}</div>
@@ -5825,9 +5952,9 @@ function savePayAndClose() {
 // ══ CASE TYPE LABEL HELPERS ══════════════════════════════════════════════════
 function getCaseTypeBadge(type) {
   const map = {
-    emergency: '<span class="case-type-badge type-emergency">🚨 طوارئ</span>',
-    internal:  '<span class="case-type-badge type-internal">🏥 داخلي</span>',
-    exception: '<span class="case-type-badge type-exception">⭐ استثناء</span>',
+    emergency: `<span class="case-type-badge type-emergency">${ic('alert')} طوارئ</span>`,
+    internal:  `<span class="case-type-badge type-internal">${ic('building')} داخلي</span>`,
+    exception: `<span class="case-type-badge type-exception">${ic('star')} استثناء</span>`,
   };
   return map[type] || '';
 }
