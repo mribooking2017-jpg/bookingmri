@@ -8107,36 +8107,54 @@ function printRegisteredCases() {
   const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>الحالات المسجلة — ${escHtml(dateStr)}</title>
 <style>
   @page { size: A4 portrait; margin: 8mm; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   html, body { background: #fff; }
   body { font-family: 'Tajawal','Cairo','Arial',sans-serif; color: #0f172a; direction: rtl; }
   .toolbar { text-align: center; padding: 8px; }
   .toolbar button { font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f1f5f9; cursor: pointer; margin: 0 4px; }
   .toolbar button.primary { background: #0d9488; color: #fff; border-color: #0d9488; }
-  .sheet { --n: ${n}; width: 194mm; height: 279mm; margin: 0 auto; display: flex; flex-direction: column; }
-  .hdr { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 2.5px solid #0f172a; padding-bottom: 2mm; margin-bottom: 2mm; flex: 0 0 auto; }
-  .hdr h1 { font-size: 22px; font-weight: 800; }
+
+  /* إطار الصفحة 3D */
+  .sheet { --n: ${n}; width: 190mm; height: 277mm; margin: 1mm auto 0; padding: 4mm 5mm 3mm;
+    display: flex; flex-direction: column;
+    border: 1.6mm ridge #64748b; border-radius: 3.5mm;
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    box-shadow: 0 1mm 2.2mm rgba(15,23,42,.38), inset 0 0 0 .5mm #fff, inset 0 0 3.5mm rgba(15,23,42,.22); }
+
+  .hdr { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 2.5px solid #0f172a; padding-bottom: 2mm; margin-bottom: 3mm; flex: 0 0 auto; }
+  .hdr h1 { font-size: 22px; font-weight: 800; text-shadow: .3mm .3mm 0 rgba(15,23,42,.15); }
   .hdr .day { font-size: 15px; font-weight: 700; color: #334155; }
+
+  /* إطار الجدول 3D */
+  .tbl { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; margin: 0 0 2mm 1.8mm;
+    border: .5mm solid #334155; border-radius: 2.2mm; overflow: hidden; background: #fff;
+    box-shadow: -.9mm .9mm 0 #94a3b8, -1.6mm 1.6mm 2.4mm rgba(15,23,42,.35); }
   .cols, .row { display: grid; grid-template-columns: 11mm 1fr 1.15fr 0.9fr; }
-  .cols { flex: 0 0 auto; background: #e2e8f0; border: 1px solid #64748b; }
-  .cols div { padding: 1.5mm 2mm; font-size: 12px; font-weight: 800; text-align: center; border-left: 1px solid #64748b; }
+  .cols { flex: 0 0 auto; background: linear-gradient(#f8fafc, #cbd5e1); border-bottom: .5mm solid #334155; box-shadow: inset 0 .4mm 0 #fff; }
+  .cols div { padding: 1.7mm 2mm; font-size: 12px; font-weight: 800; text-align: center; border-left: 1px solid #64748b; }
   .cols div:last-child { border-left: none; }
-  .rows { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: repeat(${n}, 1fr); border: 1px solid #64748b; border-top: none; }
+  .rows { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: repeat(${n}, minmax(0, 1fr)); }
   .row { min-height: 0; border-top: 1px solid #94a3b8; }
   .row:first-child { border-top: none; }
-  .row:nth-child(even) { background: #f8fafc; }
+  .row:nth-child(even) { background: #f1f5f9; }
   .cell { display: flex; align-items: center; padding: 0 2mm; overflow: hidden; border-left: 1px solid #94a3b8; line-height: 1.2;
-          font-size: clamp(6.5px, calc(225mm / var(--n) * 0.42), 15px); }
+          font-size: clamp(6.5px, calc(212mm / var(--n) * 0.42), 15px); }
   .cell:last-child { border-left: none; }
   .cell.num { justify-content: center; font-weight: 800; color: #475569; padding: 0; }
   .cell.nm { font-weight: 800; }
+
+  .ftr { flex: 0 0 auto; text-align: center; direction: ltr; font-size: 12px; font-weight: 800; letter-spacing: 3px; color: #334155;
+         border-top: 1px solid #94a3b8; padding-top: 1.6mm; }
   @media print { .toolbar { display: none; } }
 </style></head><body>
 <div class="toolbar"><button class="primary" onclick="window.print()">🖨️ طباعة</button><button onclick="window.close()">إغلاق</button></div>
 <div class="sheet">
   <div class="hdr"><h1>الحالات المسجلة</h1><div class="day">${escHtml(dayName)} — ${escHtml(dateStr)}</div></div>
-  <div class="cols"><div>م</div><div>الاسم</div><div>الفحص</div><div>ملاحظات</div></div>
-  <div class="rows">${rows}</div>
+  <div class="tbl">
+    <div class="cols"><div>م</div><div>الاسم</div><div>الفحص</div><div>ملاحظات</div></div>
+    <div class="rows">${rows}</div>
+  </div>
+  <div class="ftr">MRI Booking</div>
 </div>
 <script>window.onload = function(){ setTimeout(function(){ window.print(); }, 300); };<\/script>
 </body></html>`;
