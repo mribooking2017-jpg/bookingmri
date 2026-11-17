@@ -8056,6 +8056,7 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
     <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:8px">
 
       <div class="pm-group">📋 قائمة اليوم (الحالات المسجلة)</div>
+      <button class="pm-btn" style="--pm-c:#0d9488" onclick="closePrintSheetModal();printRegisteredCases()"><span class="ic">🗒️</span><span><b>طباعة الحالات المسجلة</b><small>A4 ورقة واحدة · الاسم + الفحص + ملاحظات · الجدول بملء الصفحة</small></span></button>
       <button class="pm-btn" style="--pm-c:#0284c7" onclick="closePrintSheetModal();printTable()"><span class="ic">🖨️</span><span><b>قائمة اليوم</b><small>A4 طولي · كل الحالات مع خانة ✓</small></span></button>
       <button class="pm-btn" style="--pm-c:#ef4444" onclick="closePrintSheetModal();sharePDFReport()"><span class="ic">📄</span><span><b>تقرير مفصّل</b><small>A4 عرضي · الفحوصات مجمّعة + السن والدفع</small></span></button>
       <button class="pm-btn" id="pmDone" style="--pm-c:#16a34a" onclick="closePrintSheetModal();exportPDF()"><span class="ic">✅</span><span><b>المنجز فقط</b><small>A4 طولي · الحالات المنجزة + إحصائيات</small></span></button>
@@ -8075,6 +8076,76 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
 </div>
 
 <script>
+// ══ طباعة الحالات المسجلة — ورقة A4 واحدة، الجدول بملء الصفحة مهما كان العدد ══
+function printRegisteredCases() {
+  const active = (cases || []).filter(c => !c.softDeleted);
+  // تجميع الفحوصات المتعددة لنفس المريض في سطر واحد
+  const map = new Map();
+  active.forEach(c => {
+    const k = (c.groupId || c.id) + '|' + c.name;
+    if (!map.has(k)) map.set(k, { name: c.name || '', exams: [c.exam].filter(Boolean), notes: c.notes || '' });
+    else {
+      const g = map.get(k);
+      if (c.exam && !g.exams.includes(c.exam)) g.exams.push(c.exam);
+      if (!g.notes && c.notes) g.notes = c.notes;
+    }
+  });
+  const list = [...map.values()];
+  if (!list.length) { showToast('⚠️ لا توجد حالات مسجلة للطباعة', 'error'); return; }
+  const n = list.length;
+  const d = new Date(examDate + 'T00:00:00');
+  const dayName = d.toLocaleDateString('ar-EG', { weekday: 'long' });
+  const dateStr = d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const rows = list.map((c, i) => `<div class="row">
+    <div class="cell num">${i + 1}</div>
+    <div class="cell nm">${escHtml(c.name)}</div>
+    <div class="cell ex">${escHtml(c.exams.join(' + '))}</div>
+    <div class="cell nt">${escHtml(c.notes)}</div>
+  </div>`).join('');
+
+  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>الحالات المسجلة — ${escHtml(dateStr)}</title>
+<style>
+  @page { size: A4 portrait; margin: 8mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body { font-family: 'Tajawal','Cairo','Arial',sans-serif; color: #0f172a; direction: rtl; }
+  .toolbar { text-align: center; padding: 8px; }
+  .toolbar button { font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f1f5f9; cursor: pointer; margin: 0 4px; }
+  .toolbar button.primary { background: #0d9488; color: #fff; border-color: #0d9488; }
+  .sheet { --n: ${n}; width: 194mm; height: 279mm; margin: 0 auto; display: flex; flex-direction: column; }
+  .hdr { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 2.5px solid #0f172a; padding-bottom: 2mm; margin-bottom: 2mm; flex: 0 0 auto; }
+  .hdr h1 { font-size: 22px; font-weight: 800; }
+  .hdr .day { font-size: 15px; font-weight: 700; color: #334155; }
+  .cols, .row { display: grid; grid-template-columns: 11mm 1fr 1.15fr 0.9fr; }
+  .cols { flex: 0 0 auto; background: #e2e8f0; border: 1px solid #64748b; }
+  .cols div { padding: 1.5mm 2mm; font-size: 12px; font-weight: 800; text-align: center; border-left: 1px solid #64748b; }
+  .cols div:last-child { border-left: none; }
+  .rows { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: repeat(${n}, 1fr); border: 1px solid #64748b; border-top: none; }
+  .row { min-height: 0; border-top: 1px solid #94a3b8; }
+  .row:first-child { border-top: none; }
+  .row:nth-child(even) { background: #f8fafc; }
+  .cell { display: flex; align-items: center; padding: 0 2mm; overflow: hidden; border-left: 1px solid #94a3b8; line-height: 1.2;
+          font-size: clamp(6.5px, calc(225mm / var(--n) * 0.42), 15px); }
+  .cell:last-child { border-left: none; }
+  .cell.num { justify-content: center; font-weight: 800; color: #475569; padding: 0; }
+  .cell.nm { font-weight: 800; }
+  @media print { .toolbar { display: none; } }
+</style></head><body>
+<div class="toolbar"><button class="primary" onclick="window.print()">🖨️ طباعة</button><button onclick="window.close()">إغلاق</button></div>
+<div class="sheet">
+  <div class="hdr"><h1>الحالات المسجلة</h1><div class="day">${escHtml(dayName)} — ${escHtml(dateStr)}</div></div>
+  <div class="cols"><div>م</div><div>الاسم</div><div>الفحص</div><div>ملاحظات</div></div>
+  <div class="rows">${rows}</div>
+</div>
+<script>window.onload = function(){ setTimeout(function(){ window.print(); }, 300); };<\/script>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) { showToast('⚠️ السماح بالنوافذ المنبثقة', 'error'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+}
+
 function openPrintSheetModal() {
   const admin = !!(currentUser && currentUser.admin);
   const canSheet = admin || (typeof isTech === 'function' && isTech());
