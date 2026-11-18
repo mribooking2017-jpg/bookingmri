@@ -1485,6 +1485,35 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
 #bulkModal.bulk-min .bulk-head { border-bottom: none; padding: 10px 12px; cursor: pointer; }
 #bulkModal.bulk-min .bulk-head h3 { font-size: 14px; }
 #bulkModal.bulk-min #bulkMaxBtn { display: none; }
+
+.sig-name { font-family: "Dancing Script","Segoe Script","Brush Script MT","Lucida Handwriting",cursive; font-style: italic; font-weight: 700; font-size: 1.6em; letter-spacing: .5px; color: var(--accent, #60a5fa); display: inline-block; transform: rotate(-3deg); padding: 0 2px; }
+#bulkModal .bulk-exambox { grid-area: exam; display: flex; align-items: center; gap: 6px; min-width: 0; flex-wrap: wrap; }
+#bulkModal .bulk-exambox .bulk-exam-select { flex: 1; min-width: 0; }
+.exam-sugg { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px; }
+.exam-sugg button { font-family: inherit; font-size: 12.5px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent-glow); color: var(--accent); cursor: pointer; }
+/* ══ الإدخال الصوتي + استيراد الملفات ══ */
+.mic-wrap { position: relative; }
+.mic-wrap > input, .mic-wrap > textarea { padding-left: 46px !important; }
+.mic-btn { flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; font-family: inherit; }
+.mic-btn .ic { width: 18px; height: 18px; }
+.mic-wrap > .mic-btn { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; }
+.mic-wrap > .mic-btn.ta { top: 8px; transform: none; }
+.mic-btn.rec { background: #dc2626; border-color: #dc2626; color: #fff; animation: micPulse 1s infinite; }
+@keyframes micPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.5); } 50% { box-shadow: 0 0 0 7px rgba(220,38,38,0); } }
+#bulkModal .bulk-namebox, #bulkModal .bulk-notebox { display: flex; align-items: center; gap: 6px; min-width: 0; }
+#bulkModal .bulk-namebox { grid-area: name; }
+#bulkModal .bulk-notebox { grid-area: notes; }
+#bulkModal .bulk-namebox .bulk-name-input, #bulkModal .bulk-notebox .bulk-notes-input { flex: 1; min-width: 0; }
+.bulk-notes-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--text); font-family: inherit; font-size: 13px; outline: none; padding: 8px 4px; min-height: 38px; }
+#bulkModal .bulk-row { grid-template-areas: "num name dup del" "num exam exam exam" "num notes notes notes" !important; }
+#bulkModal .bulk-row.bulk-unmatched { border-color: var(--yellow) !important; }
+@media (min-width: 700px) {
+  #bulkModal.bulk-max .bulk-row { grid-template-columns: 28px 1.2fr 1fr 1fr 40px 40px !important; grid-template-areas: "num name exam notes dup del" !important; }
+}
+.bulk-import-row { display: flex; gap: 8px; margin-bottom: 6px; }
+.btn-bulk-import { flex: 1; min-height: 44px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.4); color: var(--green); border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-bulk-import.alt { flex: 0 0 auto; padding: 0 14px; background: var(--surface2); border-color: var(--border); color: var(--muted); font-weight: 600; }
+.bulk-import-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -1783,6 +1812,7 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
   console.log('✅ Firebase REST ready');
 })();
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol><symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol><symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol><symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol><symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></symbol><symbol id="i-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol><symbol id="i-ruler" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></symbol><symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></symbol><symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></symbol><symbol id="i-message" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol><symbol id="i-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-xcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol><symbol id="i-megaphone" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-8z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol><symbol id="i-unlock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol><symbol id="i-card" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-filetext" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol></defs></svg>
@@ -2435,6 +2465,12 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
       <div class="bulk-hint"><span>أضف أسماء المرضى والفحوصات معاً</span><span class="bulk-draft" id="bulkDraftState">✓ تم حفظ المسودة</span></div>
       <div id="bulkRowsList"></div>
       <button class="btn-bulk-add-row" type="button" onclick="addBulkRow()"><svg class="ic"><use href="#i-plus"/></svg> إضافة سطر جديد</button>
+      <div class="bulk-import-row">
+        <button class="btn-bulk-import" type="button" onclick="document.getElementById('bulkImportFile').click()"><svg class="ic"><use href="#i-upload"/></svg> استيراد ملف حالات</button>
+        <button class="btn-bulk-import alt" type="button" onclick="downloadImportTemplate()"><svg class="ic"><use href="#i-download"/></svg> نموذج الملف</button>
+        <input type="file" id="bulkImportFile" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="handleBulkImportFile(this)">
+      </div>
+      <div class="bulk-import-hint">الأعمدة: م | الاسم | الفحص | ملاحظات — نفس ترتيب «طباعة الحالات المسجلة» (Excel أو CSV). يظهر الاستيراد في الأسطر للمراجعة قبل الحفظ.</div>
       <div style="margin-bottom:6px">
         <label>ملاحظات مشتركة (اختياري)</label>
         <textarea class="form-textarea" id="bulk_notes" placeholder="تطبق على كل الحالات..." oninput="bulkSaveDraft()"></textarea>
@@ -5632,7 +5668,7 @@ function buildBulkExamOptions() {
   });
   return opts;
 }
-function addBulkRow(name='', exam='') {
+function addBulkRow(name='', exam='', rowNotes='', gid='') {
   // تحقق من الليميت قبل إضافة سطر جديد (للسكرتارية)
   if (!name && reachedLimit()) {
     const limit = currentUser.subCfg?.caseLimit || 0;
@@ -5658,17 +5694,29 @@ function addBulkRow(name='', exam='') {
   div.id = rowId;
   div.innerHTML = `
     <span class="bulk-num"></span>
-    <input type="text" class="bulk-name-input" placeholder="اسم المريض" autocomplete="off"
-      oninput="updateBulkCount()" onkeydown="bulkRowKeydown(event,'${rowId}')">
+    <div class="bulk-namebox"><input type="text" class="bulk-name-input" placeholder="اسم المريض" autocomplete="off"
+      oninput="updateBulkCount()" onkeydown="bulkRowKeydown(event,'${rowId}')"></div>
     <button class="btn-bulk-dup" type="button" title="سطر جديد بنفس الفحص" onclick="dupBulkRow('${rowId}')">⧉</button>
     <button class="btn-bulk-del" type="button" title="حذف السطر" onclick="removeBulkRow('${rowId}')">✕</button>
-    <select class="bulk-exam-select" dir="rtl" onchange="updateBulkCount()">${buildBulkExamOptions()}</select>`;
+    <div class="bulk-exambox"><select class="bulk-exam-select" dir="rtl" onchange="updateBulkCount()">${buildBulkExamOptions()}</select></div>
+    <div class="bulk-notebox"><input type="text" class="bulk-notes-input" placeholder="ملاحظات (اختياري)" autocomplete="off" oninput="updateBulkCount()"></div>`;
   div.querySelector('.bulk-name-input').value = name;
+  div.querySelector('.bulk-notes-input').value = rowNotes || '';
+  if (gid) div.dataset.gid = gid;
+  addMicTo(div.querySelector('.bulk-namebox'), div.querySelector('.bulk-name-input'));
+  addMicTo(div.querySelector('.bulk-notebox'), div.querySelector('.bulk-notes-input'));
+  addExamMic(div);
   list.appendChild(div);
   if (exam) {
     const sel = div.querySelector('select');
+    let found = false;
     for (let i = 0; i < sel.options.length; i++) {
-      if (sel.options[i].value === exam) { sel.selectedIndex = i; break; }
+      if (sel.options[i].value === exam) { sel.selectedIndex = i; found = true; break; }
+    }
+    if (!found) { // فحص غير موجود في القائمة (مثلاً من ملف مستورد) — يُحفظ كما هو
+      const o = document.createElement('option'); o.value = exam; o.textContent = exam + ' (من الملف)';
+      sel.appendChild(o); sel.value = exam;
+      div.classList.add('bulk-unmatched');
     }
   }
   updateBulkCount();
@@ -5684,8 +5732,7 @@ function dupBulkRow(rowId) {
   const el = document.getElementById(rowId); if (!el) return;
   const exam = el.querySelector('select').value;
   const nr = addBulkRow('', exam);
-  if (nr && el.nextSibling !== nr) el.after(nr);
-  bulkRenumber(); bulkSaveDraft();
+  if (nr && el.nextSibling !== nr) el.after(nr);  bulkRenumber(); bulkSaveDraft();
 }
 function bulkRowKeydown(e, rowId) {
   if (e.key === 'Enter') {
@@ -5709,9 +5756,9 @@ function bulkSaveDraft() {
   clearTimeout(bulkDraftTimer);
   bulkDraftTimer = setTimeout(() => {
     try {
-      const rows = bulkRows().map(r => ({ name: r.querySelector('input').value, exam: r.querySelector('select').value }));
+      const rows = bulkRows().map(r => ({ name: r.querySelector('input').value, exam: r.querySelector('select').value, notes: (r.querySelector('.bulk-notes-input') || {}).value || '', gid: r.dataset.gid || '' }));
       const notes = document.getElementById('bulk_notes').value;
-      const has = rows.some(r => r.name.trim() || r.exam) || notes.trim();
+      const has = rows.some(r => r.name.trim() || r.exam || r.notes.trim()) || notes.trim();
       if (has) localStorage.setItem(bulkDraftKey(), JSON.stringify({ rows, notes, t: Date.now() }));
       else localStorage.removeItem(bulkDraftKey());
       const st = document.getElementById('bulkDraftState');
@@ -5790,7 +5837,7 @@ function openBulkModal() {
   bulkRestoring = true;
   const d = bulkLoadDraft();
   if (d && d.rows && d.rows.length) {
-    d.rows.forEach(r => addBulkRow(r.name || '', r.exam || ''));
+    d.rows.forEach(r => addBulkRow(r.name || '', r.exam || '', r.notes || '', r.gid || ''));
     document.getElementById('bulk_notes').value = d.notes || '';
     showToast('♻️ تم استرجاع مسودة الدفعة الأخيرة', 'info');
   } else { addBulkRow(); addBulkRow(); addBulkRow(); }
@@ -5832,18 +5879,24 @@ async function saveBulkCases() {
   // على الـ cache المحلي اللي ممكن يكون متأخر ويسمح بتجاوز الحد
   const currentGroups = limit > 0 ? await fetchFreshGroupCount(examDate) : new Set(cases.map(c => c.groupId || c.id)).size;
   let skippedDueToLimit = 0;
+  const newGroups = new Set();
   rows.forEach((row, idx) => {
     const name = row.querySelector('input').value.trim();
     const exam = row.querySelector('select').value;
     if (!name || !exam) return;
-    // تحقق من الليميت لكل حالة على حدة
-    if (limit > 0 && (currentGroups + added) >= limit) {
+    const caseId = 'c' + (ts + idx);
+    // الأسطر المستوردة بأكثر من فحص لنفس المريض تشترك في groupId واحد
+    const groupId = row.dataset.gid ? ('g' + ts + '_' + row.dataset.gid) : caseId;
+    // تحقق من الليميت لكل حالة (مريض) على حدة
+    if (limit > 0 && !newGroups.has(groupId) && (currentGroups + newGroups.size) >= limit) {
       skippedDueToLimit++;
       return;
     }
+    newGroups.add(groupId);
+    const rowNotes = ((row.querySelector('.bulk-notes-input') || {}).value || '').trim();
+    const fullNotes = [rowNotes, notes].filter(Boolean).join(' — ');
     const byAdmin = !!(currentUser && currentUser.admin);
-    const caseId = 'c' + (ts + idx);
-    cases.push({ id: caseId, groupId: caseId, name, exam, weight: '', notes, lastAction: 'add', lastUser: currentUser.name, lastTime: ts + idx, addedByAdmin: byAdmin });
+    cases.push({ id: caseId, groupId, name, exam, weight: '', notes: fullNotes, lastAction: 'add', lastUser: currentUser.name, lastTime: ts + idx, addedByAdmin: byAdmin });
     added++;
   });
   if (!added) { showToast('⚠️ لا توجد حالات مكتملة (اسم + فحص)', 'error'); return; }
@@ -6962,7 +7015,7 @@ document.addEventListener('DOMContentLoaded', () => {
     البيانات الموجودة قد يتم مسحها في أي وقت.
   </div>
   <button onclick="openTourModal()" style="margin-top:12px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#d97706;font-size:11px;font-weight:bold;padding:8px 16px;border-radius:10px;cursor:pointer;">📖 شرح توضيحي للتطبيق</button>
-  <div style="margin-top:10px;font-size:10px;color:#a0aec0;">by Saad Abdo &nbsp;·&nbsp; ver 9.4.2026</div>
+  <div style="margin-top:10px;font-size:10px;color:#a0aec0;direction:ltr;">by <span class="sig-name">Saad Abdo</span> &nbsp;·&nbsp; ver 18.11.2026</div>
 </footer>
 
 <!-- ══ GUIDE MODAL ══ -->
@@ -7263,7 +7316,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <div style="text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">
-        🏥 MRI Booking &nbsp;·&nbsp; دليل الاستخدام &nbsp;·&nbsp; by Saad Abdo &nbsp;·&nbsp; ver 9.4.2026
+        🏥 MRI Booking &nbsp;·&nbsp; دليل الاستخدام &nbsp;·&nbsp; by Saad Abdo &nbsp;·&nbsp; ver 18.11.2026
       </div>
 
     </div><!-- /guide-body -->
@@ -7452,7 +7505,7 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
 <!-- HEADER -->
 <div class="tour-header">
   <h1>🏥 دليل MRI Booking التفاعلي</h1>
-  <p>مرر للأسفل لعرض كل الشاشات · ver 9.4.2026</p>
+  <p>مرر للأسفل لعرض كل الشاشات · ver 18.11.2026</p>
 </div>
 
 <!-- ============================================================
@@ -8000,7 +8053,7 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
 </div>
 
 <div style="text-align:center; padding:12px; color:#64748b; font-size:0.75rem;">
-  by Saad Abdo · MRI Booking ver 9.4.2026
+  by Saad Abdo · MRI Booking ver 18.11.2026
 </div>
 
 <div class="bottom-pad"></div>
@@ -8795,6 +8848,217 @@ async function doJsonImport() {
   showToast(`✅ تم استيراد ${imported} حالة`, 'success');
   // تحديث الشاشة لو اليوم المفتوح من ضمن الأيام المستوردة
   if (byDate[examDate]) subscribeCases(examDate);
+}
+</script>
+
+<script>
+/* ══ الإدخال الصوتي ══ */
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const MIC_SVG = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M8 22h8"/></svg>';
+  let rec = null, activeBtn = null;
+  function stopRec(){ try{ rec && rec.stop(); }catch(e){} }
+  function micToggle(btn){
+    const input = btn._input;
+    if (!SR) { showToast('الإدخال الصوتي غير مدعوم في هذا المتصفح (استخدم Chrome)', 'error', 4000); return; }
+    if (activeBtn === btn) { stopRec(); return; }
+    if (rec) { stopRec(); }
+    const r = new SR();
+    r.lang = 'ar-EG'; r.interimResults = true; r.continuous = false;
+    const base = input.value ? input.value.replace(/\s+$/,'') + ' ' : '';
+    let finalTxt = '';
+    r.onstart = () => { activeBtn = btn; btn.classList.add('rec'); };
+    r.onresult = e => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) finalTxt += t + ' '; else interim += t;
+      }
+      input.value = (base + finalTxt + interim).trim();
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+    };
+    r.onerror = e => {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') showToast('اسمح باستخدام الميكروفون من إعدادات المتصفح', 'error', 4000);
+      else if (e.error === 'no-speech') showToast('لم يتم سماع صوت', 'info');
+      else if (e.error !== 'aborted') showToast('تعذّر الإدخال الصوتي: ' + e.error, 'error');
+    };
+    r.onend = () => { btn.classList.remove('rec'); if (activeBtn === btn) activeBtn = null; if (rec === r) rec = null; input.dispatchEvent(new Event('change', {bubbles:true})); };
+    rec = r;
+    try { r.start(); } catch(e) { showToast('تعذّر تشغيل الميكروفون', 'error'); }
+  }
+  function makeBtn(input){
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'mic-btn'; b.title = 'إدخال صوتي'; b.innerHTML = MIC_SVG;
+    b._input = input;
+    b.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); micToggle(b); });
+    return b;
+  }
+  window.addMicTo = function(container, input){
+    if (!container || !input || container.querySelector(':scope > .mic-btn')) return;
+    container.appendChild(makeBtn(input));
+  };
+  window.wrapMic = function(id){
+    const input = document.getElementById(id);
+    if (!input || input.parentElement.classList.contains('mic-wrap')) return;
+    const w = document.createElement('div'); w.className = 'mic-wrap';
+    input.parentNode.insertBefore(w, input); w.appendChild(input);
+    const b = makeBtn(input); if (input.tagName === 'TEXTAREA') b.classList.add('ta');
+    w.appendChild(b);
+  };
+  ['f_name','f_notes','f_referral','en_name','en_notes','bulk_notes'].forEach(wrapMic);
+})();
+
+
+/* ══ إملاء الفحص بالصوت ══ */
+function _examTokens(t){
+  const stop = new Set(['رنين','على','اشعه','اشعة','عمل','مع','و','في','ال','mri','ct','فحص']);
+  return _normName(t).replace(/[^\u0600-\u06FFa-z0-9 ]/g,' ').split(' ').filter(w => w && !stop.has(w));
+}
+function _examMatch(spoken){
+  const q = _examTokens(spoken); if (!q.length) return [];
+  const res = [];
+  const seen = new Set();
+  getExamGroups().forEach(g => g.items.forEach(it => {
+    if (seen.has(it)) return; seen.add(it);
+    const hay = _normName(it + ' ' + (EXAM_LABELS[it] || ''));
+    const words = hay.split(/[^\u0600-\u06FFa-z0-9]+/).filter(Boolean);
+    let hit = 0;
+    q.forEach(w => { if (words.some(x => x === w || (w.length > 2 && (x.startsWith(w) || w.startsWith(x) && x.length > 2)))) hit++; });
+    if (!hit) return;
+    const score = hit / q.length - Math.min(0.3, Math.abs(words.length - q.length) * 0.02);
+    res.push({exam: it, score});
+  }));
+  return res.sort((a, b) => b.score - a.score).slice(0, 3);
+}
+function _examPick(row, exam){
+  const sel = row.querySelector('.bulk-exam-select');
+  sel.value = exam; sel.dispatchEvent(new Event('change', {bubbles:true}));
+  const sg = row.querySelector('.exam-sugg'); if (sg) sg.remove();
+  if (typeof bulkSaveDraft === 'function') bulkSaveDraft();
+}
+function addExamMic(row){
+  const box = row.querySelector('.bulk-exambox'); if (!box) return;
+  const tmp = document.createElement('input'); // حقل وسيط يستقبل النص المنطوق
+  tmp.type = 'hidden';
+  box.appendChild(tmp);
+  addMicTo(box, tmp);
+  tmp.addEventListener('change', () => {
+    const spoken = tmp.value.trim(); tmp.value = '';
+    if (!spoken) return;
+    const old = row.querySelector('.exam-sugg'); if (old) old.remove();
+    const m = _examMatch(spoken);
+    if (!m.length) { showToast('لم أجد فحصاً مطابقاً لـ «' + spoken + '»', 'error', 3500); return; }
+    if (m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.15)) {
+      _examPick(row, m[0].exam); showToast('✅ ' + examLabel(m[0].exam), 'success', 2200); return;
+    }
+    const sg = document.createElement('div'); sg.className = 'exam-sugg';
+    m.forEach(x => { const b = document.createElement('button'); b.type = 'button'; b.textContent = examLabel(x.exam); b.onclick = () => _examPick(row, x.exam); sg.appendChild(b); });
+    box.appendChild(sg);
+  });
+}
+/* ══ استيراد ملف الحالات ══ */
+function _impCsvParse(text){
+  text = text.replace(/^﻿/, '');
+  const first = text.split(/\r?\n/)[0] || '';
+  const delim = (first.split('\t').length > 1) ? '\t' : (first.split(';').length > first.split(',').length ? ';' : ',');
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i+1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === delim) { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i+1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; }
+    else cur += c;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+function _impLoadXlsx(){
+  return new Promise((res, rej) => {
+    if (window.XLSX) return res(window.XLSX);
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload = () => res(window.XLSX); s.onerror = () => rej(new Error('xlsx'));
+    document.head.appendChild(s);
+  });
+}
+function _impExamIndex(){
+  const map = new Map();
+  getExamGroups().forEach(g => g.items.forEach(it => {
+    map.set(_normName(it), it);
+    const l = examLabel(it); if (l) map.set(_normName(l), it);
+  }));
+  return map;
+}
+function _impSplitExams(str, idx){
+  const parts = String(str || '').split(/\s*\+\s*/).map(s => s.trim()).filter(Boolean);
+  const out = []; let i = 0;
+  while (i < parts.length) {
+    let hit = null, hitEnd = i;
+    for (let j = parts.length - 1; j >= i; j--) {
+      const joined = parts.slice(i, j + 1).join(' + ');
+      const m = idx.get(_normName(joined));
+      if (m) { hit = m; hitEnd = j; break; }
+    }
+    if (hit) { out.push({exam: hit, ok: true}); i = hitEnd + 1; }
+    else { out.push({exam: parts[i], ok: false}); i++; }
+  }
+  return out;
+}
+function _impMapRows(rows){
+  rows = rows.map(r => r.map(c => String(c == null ? '' : c).trim())).filter(r => r.some(c => c));
+  if (!rows.length) return [];
+  const isName = c => /^(الاسم|اسم المريض|اسم|name)$/i.test(c);
+  const isExam = c => /^(الفحص|الفحوصات|نوع الفحص|exam)$/i.test(c);
+  const isNote = c => /^(ملاحظات|ملاحظة|notes?)$/i.test(c);
+  let nameI = -1, examI = -1, noteI = -1, start = 0;
+  const hi = rows.slice(0, 5).findIndex(r => r.some(isName));
+  if (hi >= 0) {
+    rows[hi].forEach((c, k) => { if (isName(c)) nameI = k; else if (isExam(c)) examI = k; else if (isNote(c)) noteI = k; });
+    start = hi + 1;
+  } else {
+    const off = /^\d+$/.test(rows[0][0] || '') ? 1 : 0;
+    nameI = off; examI = off + 1; noteI = off + 2;
+  }
+  return rows.slice(start).map(r => ({name: r[nameI] || '', exam: examI >= 0 ? (r[examI] || '') : '', notes: noteI >= 0 ? (r[noteI] || '') : ''})).filter(x => x.name);
+}
+async function handleBulkImportFile(inp){
+  const file = inp.files && inp.files[0]; inp.value = '';
+  if (!file) return;
+  try {
+    let rows;
+    if (/\.(xlsx|xls)$/i.test(file.name)) {
+      let X; try { X = await _impLoadXlsx(); } catch(e) { showToast('تعذّر تحميل مكتبة Excel (يلزم إنترنت) — استخدم CSV', 'error', 4500); return; }
+      const wb = X.read(await file.arrayBuffer(), {type: 'array'});
+      rows = X.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1, defval: ''});
+    } else {
+      rows = _impCsvParse(await file.text());
+    }
+    const items = _impMapRows(rows);
+    if (!items.length) { showToast('لم يتم العثور على حالات في الملف', 'error'); return; }
+    // احذف الأسطر الفارغة
+    document.querySelectorAll('#bulkRows .bulk-row, #bulkModal .bulk-row').forEach(r => {
+      const n = r.querySelector('.bulk-name-input'), e = r.querySelector('.bulk-exam-select'), t = r.querySelector('.bulk-notes-input');
+      if (n && !n.value.trim() && !(e && e.value) && !(t && t.value.trim())) r.remove();
+    });
+    const idx = _impExamIndex(); let n = 0, bad = 0, g = 0;
+    items.forEach(it => {
+      const exams = _impSplitExams(it.exam, idx);
+      const gid = exams.length > 1 ? ('imp' + (++g)) : '';
+      if (!exams.length) { addBulkRow(it.name, '', it.notes, ''); n++; return; }
+      exams.forEach(x => { addBulkRow(it.name, x.exam, it.notes, gid); n++; if (!x.ok) bad++; });
+    });
+    if (typeof updateBulkCount === 'function') updateBulkCount();
+    if (typeof bulkSaveDraft === 'function') bulkSaveDraft();
+    showToast(`✅ تم استيراد ${n} سطر${bad ? ` — ${bad} فحص غير معروف (مظلل)` : ''} — راجع ثم احفظ`, bad ? 'info' : 'success', 5000);
+  } catch(e) { console.error(e); showToast('تعذّر قراءة الملف', 'error'); }
+}
+function downloadImportTemplate(){
+  const csv = '﻿م,الاسم,الفحص,ملاحظات\n1,أحمد محمد,رنين على المخ والأوردة Brain + MRV,\n2,منى علي,,مثال ملاحظة\n';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
+  a.download = 'نموذج_استيراد_الحالات.csv'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 </script>
 
