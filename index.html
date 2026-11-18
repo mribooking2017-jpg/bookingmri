@@ -1552,6 +1552,52 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .card-btn-edit .ic, .card-btn-del .ic { width: 15px !important; height: 15px !important; }
   .card-done-cb { width: 20px !important; height: 20px !important; }
 }
+
+/* ══ تحسين الواجهة: سلاسة وتناسق ══ */
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+button, .btn-admin, .fchip, .tools-item, .mob-btn-add, .mob-btn-bulk, .card-btn-edit, .card-btn-del, .btn-move, .btn-print {
+  transition: transform .15s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease, opacity .2s ease !important;
+  touch-action: manipulation;
+}
+button:active:not(:disabled), .fchip:active, .tools-item:active, .btn-admin:active { transform: scale(.95); }
+/* الهيدر: العنوان يتقلّص بدل ما يتقطع */
+header { gap: 8px; box-shadow: 0 1px 8px rgba(0,0,0,.12); }
+.header-right { flex: 1 1 auto; overflow: visible !important; }
+.header-right > div:first-child { flex: 1 1 auto; min-width: 0; }
+.header-right h1 { font-size: 15px !important; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.count-badge { flex-shrink: 0; font-size: 12px !important; padding: 4px 9px !important; white-space: nowrap; }
+.header-left { gap: 5px !important; }
+.btn-logout { padding: 5px 10px !important; font-size: 12px !important; }
+/* شريط الأدمن: صف واحد مرتب يتمرر أفقياً */
+.admin-toolbar { gap: 6px !important; padding: 6px 10px !important; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.admin-toolbar .btn-admin { min-height: 36px; padding: 6px 12px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 700; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; }
+.admin-toolbar-label { font-size: 12px; }
+/* البحث والتاريخ */
+.date-input, .search-box { border-radius: 12px !important; min-height: 42px; }
+.date-input:focus, .search-box:focus { box-shadow: 0 0 0 3px rgba(56,189,248,.18); }
+.filter-bar { scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+.filter-bar::-webkit-scrollbar { display: none; }
+.fchip { scroll-snap-align: start; }
+/* الكروت: ظهور ناعم وتفاعل لطيف */
+.case-card { box-shadow: 0 1px 3px rgba(0,0,0,.14), 0 4px 14px rgba(0,0,0,.10) !important; }
+.case-card:active { transform: scale(.992) !important; }
+.card-name { word-break: break-word; }
+.card-btn-edit:active, .card-btn-del:active { transform: scale(.92); }
+.exam-badge { font-weight: 600; }
+/* النوافذ: دخول سلس */
+@keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+.modal { animation: modalIn .22s cubic-bezier(.2,.8,.2,1) both; }
+.modal-overlay { animation: overlayIn .18s ease both; }
+#toast { transition: opacity .25s ease, transform .25s ease; }
+/* شريط الأزرار السفلي */
+.mobile-action-bar { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.mob-btn-add, .mob-btn-bulk, .mobile-action-bar button { border-radius: 14px !important; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 380px) { .count-badge .ic { display: none; } .header-right h1 { font-size: 14px !important; } }
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -2008,6 +2054,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     <span class="admin-toolbar-label">👑 <span id="adminToolbarName"></span></span>
     <span style="font-size:11px;color:var(--yellow);opacity:.7;margin-right:4px">— وضع الأدمن</span>
     <button class="btn-admin" id="moveSelBtn" onclick="toggleMoveMode()" style="color:var(--accent);border-color:rgba(96,165,250,.45)">🔀 تحديد ونقل</button>
+    <button class="btn-admin" id="adminPrintBtn" onclick="openPrintSheetModal()" style="color:var(--green);border-color:rgba(52,211,153,.4)"><svg class="ic"><use href="#i-printer"/></svg> طباعة</button>
     <button class="btn-admin" id="adminUnlockDayBtn" onclick="adminUnlockDay()" style="display:none;color:var(--green);border-color:rgba(52,211,153,.4)"><svg class="ic"><use href="#i-unlock"/></svg> تنشيط اليوم</button>
   </div>
 
