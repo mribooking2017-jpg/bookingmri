@@ -1527,6 +1527,31 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
 .btn-bulk-import { flex: 1; min-height: 44px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.4); color: var(--green); border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
 .btn-bulk-import.alt { flex: 0 0 auto; padding: 0 14px; background: var(--surface2); border-color: var(--border); color: var(--muted); font-weight: 600; }
 .bulk-import-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+
+/* ══ تصغير كارت المريض للموبايل ══ */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (max-width: 700px) {
+  .cards-wrapper { padding: 8px 10px 96px !important; gap: 7px !important; }
+  .case-card { padding: 9px 11px !important; border-radius: 14px !important; }
+  .card-top { gap: 7px !important; margin-bottom: 5px !important; align-items: center !important; }
+  .card-num { width: 24px !important; height: 24px !important; font-size: 11px !important; border-radius: 7px !important; }
+  .card-name { font-size: 14.5px !important; font-weight: 700 !important; line-height: 1.25 !important; letter-spacing: 0 !important; }
+  .card-top .status-chip, .card-top .case-type-badge { font-size: 10px !important; padding: 2px 7px !important; border-radius: 7px !important; gap: 3px !important; }
+  .card-top .status-chip .ic, .card-top .case-type-badge .ic { width: 11px !important; height: 11px !important; }
+  .card-top .contrast-chip-yes { font-size: 10px !important; padding: 1px 6px !important; }
+  .card-move-btns { gap: 3px !important; }
+  .card-move-btns .btn-move { min-width: 30px !important; min-height: 30px !important; width: 30px !important; height: 30px !important; font-size: 12px !important; border-radius: 8px !important; }
+  .card-exams { margin-bottom: 5px !important; gap: 4px !important; }
+  .exam-badge { font-size: 11.5px !important; padding: 2px 8px !important; line-height: 1.4 !important; border-radius: 7px !important; }
+  .card-meta { margin-bottom: 5px !important; font-size: 11px !important; }
+  .card-notes { font-size: 12px !important; padding: 5px 8px !important; margin-bottom: 6px !important; line-height: 1.4 !important; border-radius: 7px !important; }
+  .card-footer { gap: 6px !important; padding-top: 2px; }
+  .card-action-info { font-size: 10px !important; gap: 4px !important; }
+  .card-btns { gap: 5px !important; }
+  .card-btn-edit, .card-btn-del { min-width: 34px !important; min-height: 34px !important; padding: 3px 8px !important; font-size: 13px !important; border-radius: 9px !important; line-height: 1; }
+  .card-btn-edit .ic, .card-btn-del .ic { width: 15px !important; height: 15px !important; }
+  .card-done-cb { width: 20px !important; height: 20px !important; }
+}
 </style>
 <!-- Firebase loaded after DOM — see end of body -->
 <script>
@@ -2785,74 +2810,81 @@ function rebuildUserSelect() {
 // ⚠️ القيم (النصوص جوه items) هي اللي بتتخزن في الحالات — متغيّرش فيها.
 // التنظيم بيتم في الترتيب وفي EXAM_LABELS (اسم العرض فقط).
 const EXAM_GROUPS = [
-  { icon: '🧠', label: 'الرأس والمخ', items: [
-    'رنين مخ عادي',
-    'رنين مخ وشرايين وأوردة MRA/MRV',
-    'Brain MRA رنين على شرايين المخ',
-    'رنين على أوردة المخ MRV',
-    'رنين على المخ والأوردة Brain + MRV',
-    'رنين على المخ والشرايين Brain + MRA',
-    'MRA / MRV Brain',
-    'رنين على شرايين الرقبة MRA CAROTID',
-    'رنين على العصب السمعى CPA',
-    'رنين MS مخ فقط',
-    'رنين MS فقرات عنقية فقط',
-    'رنين MS مخ وفقرات عنقية',
-    'رنين الفك T.M.J',
+  { icon: '🧠', label: 'Head & Brain', items: [
+    'Brain MRI',
+    'Brain MRA / MRV',
+    'Brain MRA',
+    'MRV Brain',
+    'Brain + MRV',
+    'Brain + MRA',
+    'MRA Carotid',
+    'CPA',
+    'MS Brain',
+    'MS Cervical Spine',
+    'MS Brain + Cervical Spine',
+    'TMJ',
   ]},
-  { icon: '🦴', label: 'العمود الفقري', items: [
-    'رنين فقرات عنقية C.S',
-    'رنين فقرات صدرية D.S',
-    'رنين فقرات قطنية L.S.S',
-    'عمود فقري كامل Whole Spine',
+  { icon: '🦴', label: 'Spine', items: [
+    'Cervical Spine (C.S)',
+    'Dorsal Spine (D.S)',
+    'Lumbosacral Spine (L.S.S)',
+    'Whole Spine',
   ]},
-  { icon: '🦵', label: 'المفاصل', items: ['رنين كتف', 'رنين على الكوع ELBOW', 'رنين يد / رسغ', 'رنين فخذ / حوض', 'رنين ركبة', 'رنين كاحل / قدم'] },
-  { icon: '🫀', label: 'البطن', items: [
-    'رنين بطن',
-    'رنين كبد',
-    'رنين كلى',
-    'رنين القنوات المرارية MRCP',
+  { icon: '🦵', label: 'Joints', items: ['Shoulder', 'Elbow', 'Hand', 'Wrist', 'Thigh', 'Hip', 'Knee', 'Ankle', 'Foot'] },
+  { icon: '🫀', label: 'Abdomen', items: [
+    'Abdomen',
+    'Liver',
+    'Kidneys',
+    'MRCP',
   ]},
-  { icon: '🔵', label: 'الحوض', items: [
-    'رنين حوض',
-    'رنين بطن وحوض',
-    'رنين بروستاتا',
-    'رنين رحم / مبيض',
-    'رنين S.I.J',
-    'رنين الناسور Fistula',
-    'رنين على الناسور الشرجى / العصعصى Fistula',
+  { icon: '🔵', label: 'Pelvis', items: [
+    'Pelvis',
+    'Abdomen + Pelvis',
+    'Prostate',
+    'Uterus',
+    'Ovary',
+    'SIJ',
+    'Fistula',
+    'Anal Fistula',
+    'Coccygeal Fistula',
   ]},
-  { icon: '➕', label: 'أخرى', items: ['رنين ثدي', 'رنين على جزء محدد', 'أخرى'] },
+  { icon: '➕', label: 'Other', items: ['Breast', 'Specific Part', 'Other'] },
 ];
 
-// اسم العرض (عربي أولاً، والمصطلح الإنجليزي بين قوسين) — للعرض فقط
-const EXAM_LABELS = {
-  'رنين مخ وشرايين وأوردة MRA/MRV': 'رنين مخ وشرايين وأوردة (MRA / MRV)',
-  'Brain MRA رنين على شرايين المخ': 'رنين على شرايين المخ (Brain MRA)',
-  'رنين على أوردة المخ MRV': 'رنين على أوردة المخ (MRV)',
-  'رنين على المخ والأوردة Brain + MRV': 'رنين على المخ والأوردة (Brain + MRV)',
-  'رنين على المخ والشرايين Brain + MRA': 'رنين على المخ والشرايين (Brain + MRA)',
-  'MRA / MRV Brain': 'رنين MRA / MRV للمخ (Brain)',
-  'رنين على شرايين الرقبة MRA CAROTID': 'رنين على شرايين الرقبة (MRA Carotid)',
-  'رنين على العصب السمعى CPA': 'رنين على العصب السمعى (CPA)',
-  'رنين MS مخ فقط': 'رنين MS – مخ فقط',
-  'رنين MS فقرات عنقية فقط': 'رنين MS – فقرات عنقية فقط',
-  'رنين MS مخ وفقرات عنقية': 'رنين MS – مخ وفقرات عنقية',
-  'رنين الفك T.M.J': 'رنين الفك (T.M.J)',
-  'رنين فقرات عنقية C.S': 'رنين فقرات عنقية (C.S)',
-  'رنين فقرات صدرية D.S': 'رنين فقرات صدرية (D.S)',
-  'رنين فقرات قطنية L.S.S': 'رنين فقرات قطنية (L.S.S)',
-  'عمود فقري كامل Whole Spine': 'عمود فقري كامل (Whole Spine)',
-  'رنين على الكوع ELBOW': 'رنين على الكوع (Elbow)',
-  'رنين القنوات المرارية MRCP': 'رنين القنوات المرارية (MRCP)',
-  'رنين S.I.J': 'رنين مفصل (S.I.J)',
-  'رنين الناسور Fistula': 'رنين الناسور (Fistula)',
-  'رنين على الناسور الشرجى / العصعصى Fistula': 'رنين على الناسور الشرجى / العصعصى (Fistula)',
+// لا توجد أسماء عرض بديلة — الأسماء إنجليزية فقط
+const EXAM_LABELS = {};
+// أسماء عربية قديمة (محفوظة في حالات/إعدادات سابقة) → تعرض وتُطابَق بالاسم الإنجليزي الجديد. لا تظهر في القائمة.
+const EXAM_LEGACY = {
+  'رنين مخ عادي':'Brain MRI',
+  'رنين مخ وشرايين وأوردة MRA/MRV':'Brain MRA / MRV',
+  'Brain MRA رنين على شرايين المخ':'Brain MRA','Brain MRA شرايين المخ':'Brain MRA',
+  'رنين على أوردة المخ MRV':'MRV Brain','أوردة المخ MRV':'MRV Brain',
+  'رنين على المخ والأوردة Brain + MRV':'Brain + MRV','المخ والأوردة Brain + MRV':'Brain + MRV',
+  'رنين على المخ والشرايين Brain + MRA':'Brain + MRA','المخ والشرايين Brain + MRA':'Brain + MRA',
+  'رنين على شرايين الرقبة MRA CAROTID':'MRA Carotid','شرايين الرقبة MRA CAROTID':'MRA Carotid',
+  'رنين على العصب السمعى CPA':'CPA','العصب السمعى CPA':'CPA',
+  'رنين MS مخ فقط':'MS Brain','رنين MS فقرات عنقية فقط':'MS Cervical Spine','رنين MS مخ وفقرات عنقية':'MS Brain + Cervical Spine',
+  'رنين الفك T.M.J':'TMJ',
+  'رنين فقرات عنقية C.S':'Cervical Spine (C.S)','رنين فقرات صدرية D.S':'Dorsal Spine (D.S)','رنين فقرات قطنية L.S.S':'Lumbosacral Spine (L.S.S)',
+  'عمود فقري كامل Whole Spine':'Whole Spine',
+  'رنين كتف':'Shoulder','رنين على الكوع ELBOW':'Elbow','الكوع ELBOW':'Elbow',
+  'رنين يد':'Hand','رنين رسغ':'Wrist','رنين يد / رسغ':'Hand / Wrist',
+  'رنين فخذ':'Thigh','رنين مفصل حوض':'Hip','رنين فخذ / حوض':'Thigh / Hip',
+  'رنين ركبة':'Knee','رنين كاحل':'Ankle','رنين قدم':'Foot','رنين كاحل / قدم':'Ankle / Foot',
+  'رنين بطن':'Abdomen','رنين كبد':'Liver','رنين كلى':'Kidneys','رنين القنوات المرارية MRCP':'MRCP',
+  'رنين حوض':'Pelvis','رنين بطن وحوض':'Abdomen + Pelvis','رنين بروستاتا':'Prostate',
+  'رنين رحم':'Uterus','رنين مبيض':'Ovary','رنين رحم / مبيض':'Uterus / Ovary','رنين S.I.J':'SIJ',
+  'رنين الناسور Fistula':'Fistula','الناسور الشرجى Fistula':'Anal Fistula','الناسور العصعصى Fistula':'Coccygeal Fistula',
+  'رنين على الناسور الشرجى / العصعصى Fistula':'Anal / Coccygeal Fistula',
+  'رنين ثدي':'Breast','رنين على جزء محدد':'Specific Part','جزء محدد':'Specific Part','أخرى':'Other',
 };
+const EXAM_GROUP_LEGACY = { 'الرأس والمخ':'Head & Brain', 'العمود الفقري':'Spine', 'المفاصل':'Joints', 'البطن':'Abdomen', 'الحوض':'Pelvis', 'أخرى':'Other', 'المفضلة':'Favorites' };
+function _examAliasHay(v) { return Object.keys(EXAM_LEGACY).filter(k => EXAM_LEGACY[k] === v).join(' ').toLowerCase(); }
+function examNorm(v) { return EXAM_LEGACY[v] || v; }
 // \u200F = علامة اتجاه يمين-لشمال عشان الترتيب ما يتلخبطش مع الإنجليزي
 // أيقونات Lucide الموحدة (من الـ sprite أعلى الصفحة)
 function ic(name, extra) { return `<svg class="ic ${extra||''}" aria-hidden="true"><use href="#i-${name}"/></svg>`; }
-function examLabel(v) { return '\u200F' + (EXAM_LABELS[v] || v); }
+function examLabel(v) { v = examNorm(v); return EXAM_LABELS[v] || v; }
 
 // ══ تنظيم الفحوصات (أدمن): مفضلة + إضافة + إخفاء/مسح ═══════════════════════
 // بيتخزن في Firestore (settings/examConfig) فيظهر لكل المستخدمين.
@@ -2865,12 +2897,12 @@ let EXAM_CFG = (function () {
 // القائمة الفعلية: الأساسية + المضافة − المخفية، والمفضلة في المقدمة
 function getExamGroups() {
   const cfg = EXAM_CFG;
-  const hidden = new Set(cfg.hidden || []);
-  const favs = cfg.favEnabled ? (cfg.favorites || []) : [];
+  const hidden = new Set((cfg.hidden || []).map(examNorm));
+  const favs = cfg.favEnabled ? (cfg.favorites || []).map(examNorm) : [];
   const favSet = new Set(favs);
   const groups = EXAM_GROUPS.map(g => ({ icon: g.icon, label: g.label, items: g.items.slice() }));
   (cfg.custom || []).forEach(c => {
-    let g = groups.find(x => x.label === c.group);
+    let g = groups.find(x => x.label === (EXAM_GROUP_LEGACY[c.group] || c.group));
     if (!g) { g = { icon: '➕', label: c.group, items: [] }; groups.push(g); }
     if (!g.items.includes(c.name)) g.items.push(c.name);
   });
@@ -2880,7 +2912,7 @@ function getExamGroups() {
     groups.forEach(g => g.items.forEach(i => { if (favSet.has(i)) favItems.push(i); }));
     favItems.sort((a, b) => favs.indexOf(a) - favs.indexOf(b));
     groups.forEach(g => { g.items = g.items.filter(i => !favSet.has(i)); });
-    if (favItems.length) groups.unshift({ icon: '⭐', label: 'المفضلة', items: favItems });
+    if (favItems.length) groups.unshift({ icon: '⭐', label: 'Favorites', items: favItems });
   }
   return groups.filter(g => g.items.length);
 }
@@ -2960,13 +2992,13 @@ function renderExamOrg() {
   // نفس الجروبات الأساسية + المضافة (بدون نقل المفضلة، عشان تفضل ظاهرة بنجمتها)
   const groups = EXAM_GROUPS.map(g => ({ icon: g.icon, label: g.label, items: g.items.slice() }));
   (cfg.custom || []).forEach(c => {
-    let g = groups.find(x => x.label === c.group);
+    let g = groups.find(x => x.label === (EXAM_GROUP_LEGACY[c.group] || c.group));
     if (!g) { g = { icon: '➕', label: c.group, items: [] }; groups.push(g); }
     if (!g.items.includes(c.name)) g.items.push(c.name);
   });
   let html = '';
   groups.forEach(g => {
-    const rows = g.items.filter(i => !hidden.has(i) && (!q || examLabel(i).toLowerCase().includes(q) || i.toLowerCase().includes(q)));
+    const rows = g.items.filter(i => !hidden.has(i) && (!q || examLabel(i).toLowerCase().includes(q) || i.toLowerCase().includes(q) || _examAliasHay(i).includes(q)));
     if (!rows.length) return;
     html += `<div class="exam-group-header">${g.icon} ${escHtml(g.label)}</div>`;
     rows.forEach(i => {
@@ -3479,6 +3511,7 @@ function removeExamCb(val) {
 }
 function getSelectedExams() { return [...document.querySelectorAll('#examListWrapper input[type=checkbox]:checked')].map(c => c.value); }
 function setSelectedExams(vals) {
+  vals = (vals || []).map(examNorm);
   document.querySelectorAll('#examListWrapper input[type=checkbox]').forEach(cb => { cb.checked = vals.includes(cb.value); });
   updateExamsPreview();
 }
@@ -8945,7 +8978,7 @@ function _examMatch(spoken){
   const seen = new Set();
   getExamGroups().forEach(g => g.items.forEach(it => {
     if (seen.has(it)) return; seen.add(it);
-    const hay = _normName(it + ' ' + (EXAM_LABELS[it] || ''));
+    const hay = _normName(it + ' ' + _examAliasHay(it));
     const words = hay.split(/[^\u0600-\u06FFa-z0-9]+/).filter(Boolean);
     let hit = 0;
     q.forEach(w => { if (words.some(x => x === w || (w.length > 2 && (x.startsWith(w) || w.startsWith(x) && x.length > 2)))) hit++; });
@@ -9110,6 +9143,7 @@ function _impExamIndex(){
     map.set(_normName(it), it);
     const l = examLabel(it); if (l) map.set(_normName(l), it);
   }));
+  Object.keys(EXAM_LEGACY).forEach(k => { const t = EXAM_LEGACY[k]; if (map.has(_normName(t))) map.set(_normName(k), map.get(_normName(t))); });
   return map;
 }
 function _impSplitExams(str, idx){
@@ -9123,7 +9157,14 @@ function _impSplitExams(str, idx){
       if (m) { hit = m; hitEnd = j; break; }
     }
     if (hit) { out.push({exam: hit, ok: true}); i = hitEnd + 1; }
-    else { out.push({exam: parts[i], ok: false}); i++; }
+    else {
+      const sub = parts[i].split(/\s*\/\s*/).filter(Boolean);
+      const pre = /^رنين\s/.test(parts[i]) ? 'رنين ' : '';
+      const subHits = sub.length > 1 ? sub.map(w => idx.get(_normName(/^رنين\s/.test(w) ? w : pre + w))) : [];
+      if (sub.length > 1 && subHits.every(Boolean)) subHits.forEach(h => out.push({exam: h, ok: true}));
+      else out.push({exam: parts[i], ok: false});
+      i++;
+    }
   }
   return out;
 }
@@ -9176,7 +9217,7 @@ async function handleBulkImportFile(inp){
   } catch(e) { console.error(e); showToast('تعذّر قراءة الملف', 'error'); }
 }
 function downloadImportTemplate(){
-  const csv = '﻿م,الاسم,الفحص,ملاحظات\n1,أحمد محمد,رنين على المخ والأوردة Brain + MRV,\n2,منى علي,,مثال ملاحظة\n';
+  const csv = '﻿م,الاسم,الفحص,ملاحظات\n1,أحمد محمد,Brain + MRV,\n2,منى علي,,مثال ملاحظة\n';
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
   a.download = 'نموذج_استيراد_الحالات.csv'; a.click();
