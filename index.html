@@ -1491,6 +1491,16 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
 #bulkModal .bulk-exambox .bulk-exam-select { flex: 1; min-width: 0; }
 .exam-sugg { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px; }
 .exam-sugg button { font-family: inherit; font-size: 12.5px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent-glow); color: var(--accent); cursor: pointer; }
+.vb-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; }
+.vb-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vb-title { font-weight: 800; font-size: 14px; color: var(--accent); flex: 1 1 100%; }
+.vb-cnt { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.vb-cnt input { width: 64px; text-align: center; padding: 8px 4px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 15px; }
+.vb-start, .vb-stop { min-height: 40px; padding: 0 18px; border-radius: 10px; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--accent); }
+.vb-stop { background: #dc2626; }
+.vb-status { font-size: 13px; color: var(--text); margin-top: 8px; min-height: 0; line-height: 1.6; }
+.vb-status:empty { display: none; }
+#bulkModal .bulk-row.vb-active { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.18); }
 /* ══ الإدخال الصوتي + استيراد الملفات ══ */
 .mic-wrap { position: relative; }
 .mic-wrap > input, .mic-wrap > textarea { padding-left: 46px !important; }
@@ -2463,6 +2473,15 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
     </div>
     <div class="bulk-body">
       <div class="bulk-hint"><span>أضف أسماء المرضى والفحوصات معاً</span><span class="bulk-draft" id="bulkDraftState">✓ تم حفظ المسودة</span></div>
+      <div class="vb-panel" id="vbPanel">
+        <div class="vb-top">
+          <span class="vb-title">🎙 إملاء دفعة بالصوت</span>
+          <label class="vb-cnt">عدد الحالات <input type="number" id="vbCount" min="1" max="100" value="15" inputmode="numeric"></label>
+          <button type="button" class="vb-start" id="vbStartBtn" onclick="vbStart()">ابدأ</button>
+          <button type="button" class="vb-stop" id="vbStopBtn" onclick="vbStop()" style="display:none">إيقاف</button>
+        </div>
+        <div class="vb-status" id="vbStatus"></div>
+      </div>
       <div id="bulkRowsList"></div>
       <button class="btn-bulk-add-row" type="button" onclick="addBulkRow()"><svg class="ic"><use href="#i-plus"/></svg> إضافة سطر جديد</button>
       <div class="bulk-import-row">
@@ -5850,6 +5869,7 @@ function openBulkModal() {
   if (!bulkBackArmed) { history.pushState({ bulk: 1 }, ''); bulkBackArmed = true; }
 }
 function closeBulkModal() {
+  if (typeof vbStop === 'function' && _vb && _vb.on) vbStop();
   const m = document.getElementById('bulkModal');
   const has = bulkRows().some(r => r.querySelector('input').value.trim() || r.querySelector('select').value);
   m.style.display = 'none'; m.classList.remove('bulk-min');
@@ -8955,6 +8975,94 @@ function addExamMic(row){
     m.forEach(x => { const b = document.createElement('button'); b.type = 'button'; b.textContent = examLabel(x.exam); b.onclick = () => _examPick(row, x.exam); sg.appendChild(b); });
     box.appendChild(sg);
   });
+}
+
+/* ══ دفعة بالإملاء الصوتي (اسم ← فحص ← الحالة التالية بعد 3 ثوانٍ) ══ */
+let _vb = { on: false, rec: null };
+function _vbSay(t){ const el = document.getElementById('vbStatus'); if (el) el.textContent = t; }
+function _vbListen(onInterim){
+  return new Promise(res => {
+    const SRc = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SRc) return res(null);
+    const r = new SRc(); r.lang = 'ar-EG'; r.interimResults = true; r.continuous = false;
+    let fin = '', err = null;
+    r.onresult = e => { let it = ''; for (let i = e.resultIndex; i < e.results.length; i++) { const t = e.results[i][0].transcript; if (e.results[i].isFinal) fin += t + ' '; else it += t; } if (onInterim) onInterim((fin + it).trim()); };
+    r.onerror = e => { err = e.error; };
+    r.onend = () => { _vb.rec = null; res(err === 'not-allowed' || err === 'service-not-allowed' ? null : fin.trim()); };
+    _vb.rec = r;
+    try { r.start(); } catch(e) { res(null); }
+  });
+}
+const _vbWait = ms => new Promise(r => setTimeout(r, ms));
+function vbStop(){
+  _vb.on = false;
+  try { _vb.rec && _vb.rec.abort(); } catch(e) {}
+  if (_vb.pickResolve) { _vb.pickResolve(); _vb.pickResolve = null; }
+  document.querySelectorAll('.bulk-row.vb-active').forEach(r => r.classList.remove('vb-active'));
+  document.getElementById('vbStartBtn').style.display = '';
+  document.getElementById('vbStopBtn').style.display = 'none';
+}
+async function vbStart(){
+  if (_vb.on) return;
+  if (!(window.SpeechRecognition || window.webkitSpeechRecognition)) { showToast('الإدخال الصوتي غير مدعوم في هذا المتصفح (استخدم Chrome)', 'error', 4000); return; }
+  const n = Math.max(1, Math.min(100, parseInt(document.getElementById('vbCount').value) || 15));
+  let rows = bulkRows();
+  let start = rows.findIndex(r => !r.querySelector('.bulk-name-input').value.trim());
+  if (start < 0) start = rows.length;
+  while (bulkRows().length < start + n) { const before = bulkRows().length; addBulkRow(); if (bulkRows().length === before) break; }
+  rows = bulkRows();
+  _vb.on = true;
+  document.getElementById('vbStartBtn').style.display = 'none';
+  document.getElementById('vbStopBtn').style.display = '';
+  const total = Math.min(n, rows.length - start);
+  try {
+    for (let k = 0; k < total && _vb.on; k++) {
+      const row = rows[start + k]; if (!row || !row.isConnected) break;
+      document.querySelectorAll('.bulk-row.vb-active').forEach(r => r.classList.remove('vb-active'));
+      row.classList.add('vb-active'); row.scrollIntoView({block: 'center', behavior: 'smooth'});
+      const nameIn = row.querySelector('.bulk-name-input'), sel = row.querySelector('.bulk-exam-select');
+      // 1) الاسم
+      let name = '', tries = 0;
+      while (_vb.on && !name && tries < 3) {
+        _vbSay(`حالة ${k + 1} من ${total} — 🎙 قل اسم المريض…`);
+        const t = await _vbListen(x => { nameIn.value = x; nameIn.dispatchEvent(new Event('input', {bubbles: true})); });
+        if (t === null) { showToast('اسمح باستخدام الميكروفون', 'error', 4000); vbStop(); return; }
+        name = t; tries++;
+      }
+      if (!_vb.on) break;
+      if (!name) { showToast('لم أسمع اسماً — تم الإيقاف', 'info'); break; }
+      nameIn.value = name; nameIn.dispatchEvent(new Event('input', {bubbles: true}));
+      // 2) الفحص
+      let done = false; tries = 0;
+      while (_vb.on && !done && tries < 3) {
+        _vbSay(`حالة ${k + 1} من ${total} — ${name} — 🎙 قل الفحص…`);
+        const t = await _vbListen();
+        if (t === null) { vbStop(); return; }
+        tries++;
+        if (!t) continue;
+        const m = _examMatch(t);
+        if (m.length && m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.15)) { _examPick(row, m[0].exam); done = true; }
+        else if (m.length) {
+          _vbSay(`اختر الفحص المناسب لـ «${t}» ⬇`);
+          const old = row.querySelector('.exam-sugg'); if (old) old.remove();
+          const sg = document.createElement('div'); sg.className = 'exam-sugg';
+          const waitPick = new Promise(r => { _vb.pickResolve = r; });
+          m.forEach(x => { const b = document.createElement('button'); b.type = 'button'; b.textContent = examLabel(x.exam); b.onclick = () => { _examPick(row, x.exam); _vb.pickResolve && _vb.pickResolve(); _vb.pickResolve = null; }; sg.appendChild(b); });
+          row.querySelector('.bulk-exambox').appendChild(sg);
+          await waitPick; done = !!sel.value;
+        } else { _vbSay(`لم أجد فحصاً لـ «${t}» — أعد المحاولة`); }
+      }
+      if (!_vb.on) break;
+      // 3) انتظار 3 ثوانٍ ثم الحالة التالية
+      if (k < total - 1) {
+        for (let c = 3; c > 0 && _vb.on; c--) { _vbSay(`✅ ${name} — الحالة التالية بعد ${c}…`); await _vbWait(1000); }
+      }
+    }
+    if (_vb.on) showToast('✅ انتهى الإملاء — راجع الحالات ثم احفظ', 'success', 4000);
+  } finally {
+    _vbSay(''); vbStop();
+    updateBulkCount(); if (typeof bulkSaveDraft === 'function') bulkSaveDraft();
+  }
 }
 /* ══ استيراد ملف الحالات ══ */
 function _impCsvParse(text){
