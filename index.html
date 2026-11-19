@@ -1498,6 +1498,8 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
 .vb-cnt input { width: 64px; text-align: center; padding: 8px 4px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 15px; }
 .vb-start, .vb-stop { min-height: 40px; padding: 0 18px; border-radius: 10px; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--accent); }
 .vb-stop { background: #dc2626; }
+.vb-pause { min-height: 40px; min-width: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.vb-pause.on { background: #f59e0b; border-color: #f59e0b; color: #fff; }
 .vb-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex: 1 1 100%; }
 .vb-opts label { display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; color: var(--muted); min-width: 0; }
 .vb-opts select { width: 100%; min-height: 38px; padding: 4px 6px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; }
@@ -1507,6 +1509,8 @@ body:not(.light) #bulkModal .bulk-head .btn-close { background: #1c2848 !importa
 .vb-status:empty { display: none; }
 #bulkModal .vb-field { outline: 2px solid #dc2626; outline-offset: 3px; border-radius: 10px; background: rgba(220,38,38,.07); }
 #bulkModal .bulk-row.vb-active { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.18); }
+.bulk-c-btn { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: Arial, sans-serif; font-size: 13px; font-weight: 800; line-height: 1; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.bulk-c-btn.on { background: #ef4444; border-color: #ef4444; color: #fff; box-shadow: 0 0 0 3px rgba(239,68,68,.18); }
 /* ══ الإدخال الصوتي + استيراد الملفات ══ */
 .mic-wrap { position: relative; }
 .mic-wrap > input, .mic-wrap > textarea { padding-left: 46px !important; }
@@ -2568,6 +2572,7 @@ header { gap: 8px; box-shadow: 0 1px 8px rgba(0,0,0,.12); }
             </label>
           </div>
           <button type="button" class="vb-start" id="vbStartBtn" onclick="vbStart()">ابدأ</button>
+          <button type="button" class="vb-pause" id="vbPauseBtn" onclick="vbPause()" style="display:none" title="إيقاف مؤقت">⏸</button>
           <button type="button" class="vb-stop" id="vbStopBtn" onclick="vbStop()" style="display:none">إيقاف</button>
         </div>
         <div class="vb-status" id="vbStatus"></div>
@@ -2945,6 +2950,8 @@ function examNorm(v) { return EXAM_LEGACY[v] || v; }
 // \u200F = علامة اتجاه يمين-لشمال عشان الترتيب ما يتلخبطش مع الإنجليزي
 // أيقونات Lucide الموحدة (من الـ sprite أعلى الصفحة)
 function ic(name, extra) { return `<svg class="ic ${extra||''}" aria-hidden="true"><use href="#i-${name}"/></svg>`; }
+// نص الفحص للطباعة/المشاركة: لو الحالة بصبغة يضاف + Contrast
+function examPrint(c) { return examLabel(c.exam) + (c.contrast ? ' + Contrast' : ''); }
 function examLabel(v) { v = examNorm(v); return EXAM_LABELS[v] || v; }
 
 // ══ تنظيم الفحوصات (أدمن): مفضلة + إضافة + إخفاء/مسح ═══════════════════════
@@ -5490,14 +5497,14 @@ function exportPDF() {
     if (!hasWeight && !hasNotes) {
       return `<tr>
         <td>${i+1}</td>
-        <td colspan="3" style="font-weight:600">${escHtml(c.name)} &nbsp;·&nbsp; <span style="color:#0369a1;font-weight:400">${escHtml(c.exam)}</span></td>
+        <td colspan="3" style="font-weight:600">${escHtml(c.name)} &nbsp;·&nbsp; <span style="color:#0369a1;font-weight:400">${escHtml(examPrint(c))}</span></td>
         <td style="text-align:center">✅</td>
       </tr>`;
     }
     return `<tr>
       <td>${i+1}</td>
       <td>${escHtml(c.name)}</td>
-      <td>${escHtml(c.exam)}</td>
+      <td>${escHtml(examPrint(c))}</td>
       <td>${hasWeight ? c.weight + ' كجم' : '—'}</td>
       <td>${hasNotes ? escHtml(c.notes) : '—'}</td>
       <td>✅</td>
@@ -5714,7 +5721,7 @@ function printTable() {
     return `<tr style="${style}">
       <td style="text-align:center">${i+1}</td>
       <td class="big">${escHtml(c.name)}</td>
-      <td class="big">${escHtml(c.exam)}</td>
+      <td class="big">${escHtml(examPrint(c))}</td>
       <td>${hasWeight ? c.weight + ' كجم' : ''}</td>
       <td>${hasNotes ? escHtml(c.notes) : ''}</td>
       <td style="text-align:center">${done ? '✅' : '⬜'}</td>
@@ -5776,7 +5783,9 @@ function printTable() {
 }
 
 // ══ BULK ADD ═══════════════════════════════════════════════════════════════
+let _bulkOptsCache = null;
 function buildBulkExamOptions() {
+  if (_bulkOptsCache) return _bulkOptsCache;
   let opts = '<option value="">— اختر الفحص —</option>';
   getExamGroups().forEach(g => {
     opts += `<optgroup label="${g.icon} ${g.label}">`;
@@ -5785,7 +5794,7 @@ function buildBulkExamOptions() {
   });
   return opts;
 }
-function addBulkRow(name='', exam='', rowNotes='', gid='') {
+function addBulkRow(name='', exam='', rowNotes='', gid='', contrast=false) {
   // تحقق من الليميت قبل إضافة سطر جديد (للسكرتارية)
   if (!name && reachedLimit()) {
     const limit = currentUser.subCfg?.caseLimit || 0;
@@ -5813,13 +5822,14 @@ function addBulkRow(name='', exam='', rowNotes='', gid='') {
     <span class="bulk-num"></span>
     <div class="bulk-namebox"><input type="text" class="bulk-name-input" placeholder="اسم المريض" autocomplete="off"
       oninput="updateBulkCount()" onkeydown="bulkRowKeydown(event,'${rowId}')"></div>
-    <button class="btn-bulk-dup" type="button" title="سطر جديد بنفس الفحص" onclick="dupBulkRow('${rowId}')">⧉</button>
+    <button class="btn-bulk-dup" type="button" title="فحص آخر لنفس المريض" onclick="dupBulkRow('${rowId}')">⧉</button>
     <button class="btn-bulk-del" type="button" title="حذف السطر" onclick="removeBulkRow('${rowId}')">✕</button>
-    <div class="bulk-exambox"><select class="bulk-exam-select" dir="rtl" onchange="updateBulkCount()">${buildBulkExamOptions()}</select></div>
+    <div class="bulk-exambox"><select class="bulk-exam-select" dir="rtl" onchange="updateBulkCount()">${buildBulkExamOptions()}</select><button type="button" class="bulk-c-btn" title="صبغة (Contrast)" onclick="toggleBulkC(this)">C</button></div>
     <div class="bulk-notebox"><input type="text" class="bulk-notes-input" placeholder="ملاحظات (اختياري)" autocomplete="off" oninput="updateBulkCount()"></div>`;
   div.querySelector('.bulk-name-input').value = name;
   div.querySelector('.bulk-notes-input').value = rowNotes || '';
   if (gid) div.dataset.gid = gid;
+  if (contrast) { div.dataset.contrast = '1'; div.querySelector('.bulk-c-btn').classList.add('on'); }
   addMicTo(div.querySelector('.bulk-namebox'), div.querySelector('.bulk-name-input'));
   addMicTo(div.querySelector('.bulk-notebox'), div.querySelector('.bulk-notes-input'));
   addExamMic(div);
@@ -5845,11 +5855,24 @@ function bulkDraftKey() { return 'mriBulkDraft_' + (typeof examDate !== 'undefin
 function bulkRows() { return [...document.querySelectorAll('#bulkRowsList .bulk-row')]; }
 function bulkRenumber() { bulkRows().forEach((r, i) => { const n = r.querySelector('.bulk-num'); if (n) n.textContent = i + 1; }); }
 function removeBulkRow(rowId) { const el = document.getElementById(rowId); if (el) el.remove(); updateBulkCount(); bulkSaveDraft(); }
+function toggleBulkC(btn) {
+  const row = btn.closest('.bulk-row'); if (!row) return;
+  const on = !btn.classList.contains('on');
+  btn.classList.toggle('on', on);
+  if (on) row.dataset.contrast = '1'; else delete row.dataset.contrast;
+  bulkSaveDraft();
+}
 function dupBulkRow(rowId) {
+  // تكرار = نفس المريض + فحص آخر: ينسخ الاسم ويربط السطرين بنفس المجموعة (حالة واحدة بأكثر من فحص)
   const el = document.getElementById(rowId); if (!el) return;
-  const exam = el.querySelector('select').value;
-  const nr = addBulkRow('', exam);
-  if (nr && el.nextSibling !== nr) el.after(nr);  bulkRenumber(); bulkSaveDraft();
+  const name = el.querySelector('.bulk-name-input').value;
+  const notes = (el.querySelector('.bulk-notes-input') || {}).value || '';
+  if (!el.dataset.gid) el.dataset.gid = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const nr = addBulkRow(name, '', '', el.dataset.gid, false);
+  if (!nr) return;
+  if (el.nextSibling !== nr) el.after(nr);
+  bulkRenumber(); bulkSaveDraft();
+  setTimeout(() => { nr.scrollIntoView({block: 'nearest', behavior: 'smooth'}); const sel = nr.querySelector('.bulk-exam-select'); if (sel) sel.focus(); }, 60);
 }
 function bulkRowKeydown(e, rowId) {
   if (e.key === 'Enter') {
@@ -5873,7 +5896,7 @@ function bulkSaveDraft() {
   clearTimeout(bulkDraftTimer);
   bulkDraftTimer = setTimeout(() => {
     try {
-      const rows = bulkRows().map(r => ({ name: r.querySelector('input').value, exam: r.querySelector('select').value, notes: (r.querySelector('.bulk-notes-input') || {}).value || '', gid: r.dataset.gid || '' }));
+      const rows = bulkRows().map(r => ({ name: r.querySelector('input').value, exam: r.querySelector('select').value, notes: (r.querySelector('.bulk-notes-input') || {}).value || '', gid: r.dataset.gid || '', contrast: r.dataset.contrast === '1' }));
       const notes = document.getElementById('bulk_notes').value;
       const has = rows.some(r => r.name.trim() || r.exam || r.notes.trim()) || notes.trim();
       if (has) localStorage.setItem(bulkDraftKey(), JSON.stringify({ rows, notes, t: Date.now() }));
@@ -5954,7 +5977,7 @@ function openBulkModal() {
   bulkRestoring = true;
   const d = bulkLoadDraft();
   if (d && d.rows && d.rows.length) {
-    d.rows.forEach(r => addBulkRow(r.name || '', r.exam || '', r.notes || '', r.gid || ''));
+    d.rows.forEach(r => addBulkRow(r.name || '', r.exam || '', r.notes || '', r.gid || '', !!r.contrast));
     document.getElementById('bulk_notes').value = d.notes || '';
     showToast('♻️ تم استرجاع مسودة الدفعة الأخيرة', 'info');
   }
@@ -6016,7 +6039,7 @@ async function saveBulkCases() {
     const rowNotes = ((row.querySelector('.bulk-notes-input') || {}).value || '').trim();
     const fullNotes = [rowNotes, notes].filter(Boolean).join(' — ');
     const byAdmin = !!(currentUser && currentUser.admin);
-    cases.push({ id: caseId, groupId, name, exam, weight: '', notes: fullNotes, lastAction: 'add', lastUser: currentUser.name, lastTime: ts + idx, addedByAdmin: byAdmin });
+    cases.push({ id: caseId, groupId, name, exam, weight: '', notes: fullNotes, contrast: row.dataset.contrast === '1', lastAction: 'add', lastUser: currentUser.name, lastTime: ts + idx, addedByAdmin: byAdmin });
     added++;
   });
   if (!added) { showToast('⚠️ لا توجد حالات مكتملة (اسم + فحص)', 'error'); return; }
@@ -6531,8 +6554,8 @@ function shareWhatsAppSummary() {
   const groupMap = new Map();
   activeCases.forEach(c => {
     const gid = (c.groupId || c.id) + '|' + c.name;
-    if (!groupMap.has(gid)) groupMap.set(gid, { ...c, exams: [c.exam] });
-    else if (!groupMap.get(gid).exams.includes(c.exam)) groupMap.get(gid).exams.push(c.exam);
+    if (!groupMap.has(gid)) groupMap.set(gid, { ...c, exams: [examPrint(c)] });
+    else if (!groupMap.get(gid).exams.includes(examPrint(c))) groupMap.get(gid).exams.push(examPrint(c));
   });
   const grouped = [...groupMap.values()];
 
@@ -6540,7 +6563,7 @@ function shareWhatsAppSummary() {
     const isDone = !!doneStates[c.id];
     const typeLabel = c.caseType === 'emergency' ? ' 🚨' : c.caseType === 'internal' ? ' 🏥' : c.caseType === 'exception' ? ' ⭐' : '';
     lines.push(`*${i+1}. ${c.name}*${typeLabel}${isDone ? ' ✅' : ''}`);
-    lines.push(`   🔬 ${c.exams.join(' + ')}${c.contrast ? ' 💉' : ''}`);
+    lines.push(`   🔬 ${c.exams.join(' + ')}`);
     if (c.weight) lines.push(`   ⚖️ الوزن: ${c.weight} كجم`);
     if (c.age)    lines.push(`   🎂 السن: ${c.age} سنة`);
     if (c.referral) lines.push(`   🏥 المحيل: ${c.referral}`);
@@ -6567,8 +6590,8 @@ function sharePDFReport() {
   const groupMap = new Map();
   activeCases.forEach(c => {
     const gid = (c.groupId || c.id) + '|' + c.name;
-    if (!groupMap.has(gid)) groupMap.set(gid, { ...c, exams: [c.exam] });
-    else if (!groupMap.get(gid).exams.includes(c.exam)) groupMap.get(gid).exams.push(c.exam);
+    if (!groupMap.has(gid)) groupMap.set(gid, { ...c, exams: [examPrint(c)] });
+    else if (!groupMap.get(gid).exams.includes(examPrint(c))) groupMap.get(gid).exams.push(examPrint(c));
   });
   const grouped = [...groupMap.values()];
   const total = grouped.length;
@@ -6582,7 +6605,7 @@ function sharePDFReport() {
     return `<tr style="${isDone ? 'background:#f0fdf4;opacity:.75' : ''}">
       <td style="text-align:center;font-weight:700">${i+1}</td>
       <td style="font-weight:600">${escHtml(c.name)} ${typeLabel}</td>
-      <td>${escHtml(c.exams.join(' + '))}${c.contrast ? ' 💉' : ''}</td>
+      <td>${escHtml(c.exams.join(' + '))}</td>
       <td style="text-align:center">${c.age ? c.age + ' س' : '—'}</td>
       <td>${escHtml(c.referral||'—')}</td>
       <td>${c.paymentNote ? escHtml(c.paymentNote) : '—'}</td>
@@ -8256,10 +8279,10 @@ function printRegisteredCases() {
   const map = new Map();
   active.forEach(c => {
     const k = (c.groupId || c.id) + '|' + c.name;
-    if (!map.has(k)) map.set(k, { name: c.name || '', exams: [c.exam].filter(Boolean), notes: c.notes || '' });
+    if (!map.has(k)) map.set(k, { name: c.name || '', exams: [c.exam ? examPrint(c) : ''].filter(Boolean), notes: c.notes || '' });
     else {
       const g = map.get(k);
-      if (c.exam && !g.exams.includes(c.exam)) g.exams.push(c.exam);
+      if (c.exam && !g.exams.includes(examPrint(c))) g.exams.push(examPrint(c));
       if (!g.notes && c.notes) g.notes = c.notes;
     }
   });
@@ -9101,8 +9124,17 @@ function _vbField(row, which){
 const _vbWait = ms => new Promise(r => setTimeout(r, ms));
 function vbSaveOpts(){ try { localStorage.setItem('mriVbOpts', JSON.stringify({d: vbDelay.value, n: vbLangName.value, e: vbLangExam.value})); } catch(e) {} }
 function vbLoadOpts(){ try { const o = JSON.parse(localStorage.getItem('mriVbOpts') || 'null'); if (o) { vbDelay.value = o.d; vbLangName.value = o.n; vbLangExam.value = o.e; } } catch(e) {} }
+function vbPause(){
+  if (!_vb.on) return;
+  _vb.paused = !_vb.paused;
+  const b = document.getElementById('vbPauseBtn');
+  b.classList.toggle('on', _vb.paused); b.textContent = _vb.paused ? '▶ متابعة' : '⏸';
+  if (_vb.paused) { try { _vb.rec && _vb.rec.abort(); } catch(e) {} _vbSay('⏸ متوقف مؤقتاً — اضغط «متابعة» عند الاستعداد'); }
+}
+async function _vbGate(){ while (_vb.on && _vb.paused) await _vbWait(200); }
 function vbStop(){
-  _vb.on = false;
+  _vb.on = false; _vb.paused = false;
+  { const pb = document.getElementById('vbPauseBtn'); if (pb) { pb.style.display = 'none'; pb.classList.remove('on'); pb.textContent = '⏸'; } }
   try { _vb.rec && _vb.rec.abort(); } catch(e) {}
   if (_vb.pickResolve) { _vb.pickResolve(); _vb.pickResolve = null; }
   document.querySelectorAll('.bulk-row.vb-active').forEach(r => r.classList.remove('vb-active'));
@@ -9118,12 +9150,18 @@ async function vbStart(){
   let rows = bulkRows();
   let start = rows.findIndex(r => !r.querySelector('.bulk-name-input').value.trim());
   if (start < 0) start = rows.length;
-  while (bulkRows().length < start + n) { const before = bulkRows().length; addBulkRow(); if (bulkRows().length === before) break; }
+  // إنشاء الأسطر دفعة واحدة بدون تمرير/تركيز/حفظ مسودة لكل سطر (سبب البطء)
+  _bulkOptsCache = buildBulkExamOptions(); _bulkOptsCache = _bulkOptsCache;
+  const _prevRestoring = bulkRestoring; bulkRestoring = true;
+  try { let cnt = bulkRows().length; while (cnt < start + n) { addBulkRow(); const now = bulkRows().length; if (now === cnt) break; cnt = now; } }
+  finally { bulkRestoring = _prevRestoring; _bulkOptsCache = null; }
+  updateBulkCount();
   rows = bulkRows();
   if (!auto) { const r0 = rows[start]; if (r0) { r0.scrollIntoView({block: 'center', behavior: 'smooth'}); const i0 = r0.querySelector('.bulk-name-input'); if (i0) i0.focus(); } updateBulkCount(); return; }
   _vb.on = true;
   document.getElementById('vbStartBtn').style.display = 'none';
   document.getElementById('vbStopBtn').style.display = '';
+  document.getElementById('vbPauseBtn').style.display = '';
   const total = Math.min(n, rows.length - start);
   try {
     for (let k = 0; k < total && _vb.on; k++) {
@@ -9134,21 +9172,33 @@ async function vbStart(){
       // 1) الاسم
       let name = '', tries = 0;
       while (_vb.on && !name) {
+        await _vbGate(); if (!_vb.on) break;
         _vbField(row, 'name'); nameIn.focus();
         _vbSay(`حالة ${k + 1} من ${total} — 🎙 قل اسم المريض…`);
         const t = await _vbListen(x => { nameIn.value = x; nameIn.dispatchEvent(new Event('input', {bubbles: true})); }, document.getElementById('vbLangName').value);
         if (t === null) { showToast(_vb.err === 'network' ? 'لا يوجد اتصال بخدمة التعرف الصوتي' : 'اسمح باستخدام الميكروفون', 'error', 4000); vbStop(); return; }
+        if (_vb.paused) { nameIn.value = ''; nameIn.dispatchEvent(new Event('input', {bubbles: true})); continue; }
         name = t; if (!name) await _vbWait(400);
       }
       if (!_vb.on) break;
       nameIn.value = name; nameIn.dispatchEvent(new Event('input', {bubbles: true}));
       // 2) الفحص
-      let done = false; tries = 0;
-      while (_vb.on && !done) {
+      let done = false, manual = false;
+      const onSel = e => {
+        if (!e.isTrusted || !sel.value) return;      // اختيار يدوي من المستخدم
+        manual = true;
+        try { _vb.rec && _vb.rec.abort(); } catch(x) {}
+        if (_vb.pickResolve) { _vb.pickResolve(); _vb.pickResolve = null; }
+      };
+      sel.addEventListener('change', onSel);
+      while (_vb.on && !done && !manual) {
+        await _vbGate(); if (!_vb.on || manual) break;
         _vbField(row, 'exam'); sel.focus();
         _vbSay(`حالة ${k + 1} من ${total} — ${name} — 🎙 قل الفحص…`);
         const t = await _vbListen(null, document.getElementById('vbLangExam').value);
-        if (t === null) { showToast(_vb.err === 'network' ? 'لا يوجد اتصال بخدمة التعرف الصوتي' : 'اسمح باستخدام الميكروفون', 'error', 4000); vbStop(); return; }
+        if (t === null) { sel.removeEventListener('change', onSel); showToast(_vb.err === 'network' ? 'لا يوجد اتصال بخدمة التعرف الصوتي' : 'اسمح باستخدام الميكروفون', 'error', 4000); vbStop(); return; }
+        if (manual) break;
+        if (_vb.paused) continue;
         if (!t) { await _vbWait(400); continue; }
         const m = _examMatch(t);
         if (m.length && m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.15)) { _examPick(row, m[0].exam); done = true; }
@@ -9162,13 +9212,22 @@ async function vbStart(){
           await waitPick; done = !!sel.value;
         } else { _vbSay(`لم أجد فحصاً لـ «${t}» — أعد المحاولة`); await _vbWait(400); }
       }
-      if (!_vb.on) break;
-      // 3) انتظار 3 ثوانٍ ثم الحالة التالية
+      const _sg = row.querySelector('.exam-sugg'); if (_sg) _sg.remove();
+      if (!_vb.on) { sel.removeEventListener('change', onSel); break; }
+      // 3) انتظار ثم الحالة التالية — أي تعديل يدوي يعيد العدّاد من جديد
+      let bump = false;
+      const onBump = e => { if (e.isTrusted) bump = true; };
+      row.addEventListener('change', onBump); row.addEventListener('input', onBump);
       if (k < total - 1) {
         document.querySelectorAll('.vb-field').forEach(e => { e.classList.remove('vb-field'); const b = e.querySelector('.mic-btn'); if (b) b.classList.remove('rec'); });
         const _dl = Math.max(1, parseInt(document.getElementById('vbDelay').value) || 3);
-        for (let c = _dl; c > 0 && _vb.on; c--) { _vbSay(`✅ ${name} — الحالة التالية بعد ${c}…`); await _vbWait(1000); }
+        for (let c = _dl; c > 0 && _vb.on; c--) {
+          await _vbGate(); if (!_vb.on) break;
+          if (bump) { bump = false; c = _dl; }
+          _vbSay(`✅ ${name} — الحالة التالية بعد ${c}…`); await _vbWait(1000);
+        }
       }
+      sel.removeEventListener('change', onSel); row.removeEventListener('change', onBump); row.removeEventListener('input', onBump);
     }
     if (_vb.on) showToast('✅ انتهى الإملاء — راجع الحالات ثم احفظ', 'success', 4000);
   } finally {
@@ -9212,7 +9271,10 @@ function _impExamIndex(){
   return map;
 }
 function _impSplitExams(str, idx){
-  const parts = String(str || '').split(/\s*\+\s*/).map(s => s.trim()).filter(Boolean);
+  const raw = String(str || '').split(/\s*\+\s*/).map(s => s.trim()).filter(Boolean);
+  const isC = t => /^((with|بـ?)\s*)?(contrast|صبغة)$/i.test(t) || /^بصبغة$/.test(t);
+  const parts = [], cflag = [];
+  raw.forEach(t => { if (isC(t)) { if (cflag.length) cflag[cflag.length - 1] = true; } else { parts.push(t); cflag.push(false); } });
   const out = []; let i = 0;
   while (i < parts.length) {
     let hit = null, hitEnd = i;
@@ -9221,13 +9283,13 @@ function _impSplitExams(str, idx){
       const m = idx.get(_normName(joined));
       if (m) { hit = m; hitEnd = j; break; }
     }
-    if (hit) { out.push({exam: hit, ok: true}); i = hitEnd + 1; }
+    if (hit) { out.push({exam: hit, ok: true, contrast: cflag[hitEnd]}); i = hitEnd + 1; }
     else {
       const sub = parts[i].split(/\s*\/\s*/).filter(Boolean);
       const pre = /^رنين\s/.test(parts[i]) ? 'رنين ' : '';
       const subHits = sub.length > 1 ? sub.map(w => idx.get(_normName(/^رنين\s/.test(w) ? w : pre + w))) : [];
-      if (sub.length > 1 && subHits.every(Boolean)) subHits.forEach(h => out.push({exam: h, ok: true}));
-      else out.push({exam: parts[i], ok: false});
+      if (sub.length > 1 && subHits.every(Boolean)) subHits.forEach(h => out.push({exam: h, ok: true, contrast: cflag[i]}));
+      else out.push({exam: parts[i], ok: false, contrast: cflag[i]});
       i++;
     }
   }
@@ -9274,7 +9336,7 @@ async function handleBulkImportFile(inp){
       const exams = _impSplitExams(it.exam, idx);
       const gid = exams.length > 1 ? ('imp' + (++g)) : '';
       if (!exams.length) { addBulkRow(it.name, '', it.notes, ''); n++; return; }
-      exams.forEach(x => { addBulkRow(it.name, x.exam, it.notes, gid); n++; if (!x.ok) bad++; });
+      exams.forEach(x => { addBulkRow(it.name, x.exam, it.notes, gid, !!x.contrast); n++; if (!x.ok) bad++; });
     });
     if (typeof updateBulkCount === 'function') updateBulkCount();
     if (typeof bulkSaveDraft === 'function') bulkSaveDraft();
