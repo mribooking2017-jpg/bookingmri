@@ -7214,7 +7214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     البيانات الموجودة قد يتم مسحها في أي وقت.
   </div>
   <button onclick="openTourModal()" style="margin-top:12px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:#d97706;font-size:11px;font-weight:bold;padding:8px 16px;border-radius:10px;cursor:pointer;">📖 شرح توضيحي للتطبيق</button>
-  <div style="margin-top:10px;font-size:10px;color:#a0aec0;direction:ltr;">by <span class="sig-name">Saad Abdo</span> &nbsp;·&nbsp; ver 18.11.2026</div>
+  <div style="margin-top:10px;font-size:10px;color:#a0aec0;direction:ltr;">by <span class="sig-name">Saad Abdo</span> &nbsp;·&nbsp; ver 19.11.2026</div>
 </footer>
 
 <!-- ══ GUIDE MODAL ══ -->
@@ -7232,6 +7232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="#g-tech-edit">✎ تعديل الفني</a>
         <a href="#g-compare">📊 مقارنة</a>
         <a href="#g-features">⚙️ المميزات</a>
+        <a href="#g-new">🆕 التحديثات</a>
         <a href="#g-icons">🔣 الأيقونات</a>
         <a href="#g-casetypes">🏷️ أنواع الحالات</a>
         <a href="#g-payment">💳 الدفع</a>
@@ -7398,13 +7399,34 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="g-feat-card"><div class="g-feat-icon g-fi-red">📊</div><div class="g-feat-content"><h4>إحصائيات يومية</h4><p>توزيع الفحوصات + نشاط كل مستخدم — أدمن فقط</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-blue">🔍</div><div class="g-feat-content"><h4>بحث متقدم</h4><p>بحث فوري بالاسم والفحص + بحث بنطاق تواريخ</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-green">🖨️</div><div class="g-feat-content"><h4>طباعة ومشاركة</h4><p>طباعة مباشرة + PDF + ملخص واتساب</p></div></div>
-          <div class="g-feat-card"><div class="g-feat-icon g-fi-purple">📋</div><div class="g-feat-content"><h4>إضافة دفعة Bulk</h4><p>إدخال عدة أسماء دفعة واحدة</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-purple">📋</div><div class="g-feat-content"><h4>إضافة دفعة Bulk</h4><p>إدخال عدة أسماء دفعة واحدة — يدوياً أو بالصوت أو باستيراد ملف</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-yellow">🔒</div><div class="g-feat-content"><h4>قفل اليوم</h4><p>الحالات المقفولة لا يمكن تعديلها لغير الأدمن</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-red">🏁</div><div class="g-feat-content"><h4>إنهاء اليوم</h4><p>الفني يقفل حالات يومه الحالية — الحالات الجديدة بعدها تفضل قابلة للتعديل</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-red">📢</div><div class="g-feat-content"><h4>شريط الإشعارات</h4><p>الأدمن يكتب تعليمات تظهر للجميع فوراً</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-blue">🏷️</div><div class="g-feat-content"><h4>أنواع الحالات الأربعة</h4><p>عادي / طوارئ (نبض أحمر) / داخلي / استثناء</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-orange">💉</div><div class="g-feat-content"><h4>الصبغة (Contrast)</h4><p>تعليم الحالة التي تحتاج صبغة — شيب 💉 يظهر في الكارد</p></div></div>
           <div class="g-feat-card"><div class="g-feat-icon g-fi-purple">↕️</div><div class="g-feat-content"><h4>سحب وإفلات</h4><p>الفنيون يعيدون ترتيب الحالات — يُحفظ في Firebase</p></div></div>
+        </div>
+      </div>
+
+      <hr class="g-divider">
+
+      <!-- WHAT'S NEW -->
+      <div id="g-new">
+        <div class="g-section-title">🆕 آخر التحديثات</div>
+        <div class="g-feat-grid">
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-red">🎙</div><div class="g-feat-content"><h4>إدخال صوتي في الحقول</h4><p>زر ميكروفون بجانب الاسم والملاحظات والجهة المحوِّلة — اضغطه وتكلم ثم يُكتب النص (يلزم Chrome وإذن الميكروفون)</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-purple">📋</div><div class="g-feat-content"><h4>دفعة بالإملاء التلقائي</h4><p>من «دفعة»: اختر عدد الحالات (الافتراضي 15) وفعّل «إملاء صوتي تلقائي» ثم «ابدأ». تُجهَّز الأسطر ويُملى الاسم ثم الفحص ثم ينتقل للحالة التالية تلقائياً</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-orange">🎛️</div><div class="g-feat-content"><h4>تحكم في الإملاء</h4><p>⏸ إيقاف مؤقت/متابعة، وخيار مدة الانتقال بين الحالات (1–10 ث)، ولغة نطق الاسم ولغة نطق الفحص. إطار أحمر يوضّح المريض والخانة الحالية، ولو لم يُسمع صوت يبقى على نفس الخانة</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-green">✋</div><div class="g-feat-content"><h4>التصحيح اليدوي أثناء الإملاء</h4><p>اختيار الفحص من القائمة أو الاقتراحات أو تعديل الاسم يدوياً يوقف الاستماع ويكمل، وأي تعديل أثناء العدّاد يعيده من جديد</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-blue">🧠</div><div class="g-feat-content"><h4>مطابقة الفحص بالصوت</h4><p>تفهم أسماء الفحوصات العربية والعامية (ايد، ركبة، قطنية…) دون الحاجة لقول «رنين على». التطابق الواضح يُختار تلقائياً وإلا تظهر 3 اقتراحات</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-green">📥</div><div class="g-feat-content"><h4>استيراد ملف حالات</h4><p>من «دفعة» ← «استيراد ملف حالات» (Excel أو CSV) بأعمدة: م | الاسم | الفحص | ملاحظات — نفس شكل «طباعة الحالات المسجلة». تظهر الصفوف للمراجعة قبل الحفظ، والفحص غير المعروف يُظلَّل بالأصفر. يوجد زر «نموذج الملف»</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-red">C</div><div class="g-feat-content"><h4>زر الصبغة في الدفعة</h4><p>زر C صغير بجانب كل فحص — إذا فُعِّل صارت الحالة بصبغة، وتُطبع وتُشارك بصيغة «الفحص + Contrast»</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-purple">⧉</div><div class="g-feat-content"><h4>تكرار السطر = فحص آخر لنفس المريض</h4><p>ينسخ الاسم ويربط السطرين كحالة واحدة بأكثر من فحص، ويترك الفحص فارغاً لتختاره</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-blue">🔤</div><div class="g-feat-content"><h4>أسماء الفحوصات بالإنجليزية</h4><p>قائمة الفحوصات صارت إنجليزية فقط (Knee, Brain MRI…) وتُفصل الفحوصات المدمجة. الحالات القديمة تظهر تلقائياً بالأسماء الجديدة</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-yellow">🔁</div><div class="g-feat-content"><h4>فحص التكرار (أدمن)</h4><p>من زر «نطاق» ← «فحص التكرار»: يعرض الأسماء المكررة وأيامها. خيار «تجاهل المكرر في نفس اليوم» يُظهر من ظهر في يومين مختلفين فأكثر، وزر 🖨️ لطباعة القائمة</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-green">🖨️</div><div class="g-feat-content"><h4>زر طباعة في شريط الأدمن</h4><p>بجانب «تحديد ونقل» لفتح قائمة الطباعة مباشرة (للأدمن فقط)</p></div></div>
+          <div class="g-feat-card"><div class="g-feat-icon g-fi-orange">📱</div><div class="g-feat-content"><h4>واجهة أخف على الموبايل</h4><p>كروت أصغر وخطوط أنسب، وهيدر وأزرار وحركات أنعم</p></div></div>
         </div>
       </div>
 
@@ -7515,7 +7537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <div style="text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">
-        🏥 MRI Booking &nbsp;·&nbsp; دليل الاستخدام &nbsp;·&nbsp; by Saad Abdo &nbsp;·&nbsp; ver 18.11.2026
+        🏥 MRI Booking &nbsp;·&nbsp; دليل الاستخدام &nbsp;·&nbsp; by Saad Abdo &nbsp;·&nbsp; ver 19.11.2026
       </div>
 
     </div><!-- /guide-body -->
@@ -7704,7 +7726,7 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
 <!-- HEADER -->
 <div class="tour-header">
   <h1>🏥 دليل MRI Booking التفاعلي</h1>
-  <p>مرر للأسفل لعرض كل الشاشات · ver 18.11.2026</p>
+  <p>مرر للأسفل لعرض كل الشاشات · ver 19.11.2026</p>
 </div>
 
 <!-- ============================================================
@@ -8252,7 +8274,7 @@ const TOUR_HTML_CONTENT = `<!DOCTYPE html>
 </div>
 
 <div style="text-align:center; padding:12px; color:#64748b; font-size:0.75rem;">
-  by Saad Abdo · MRI Booking ver 18.11.2026
+  by Saad Abdo · MRI Booking ver 19.11.2026
 </div>
 
 <div class="bottom-pad"></div>
@@ -9109,23 +9131,100 @@ async function doJsonImport() {
 
 
 /* ══ إملاء الفحص بالصوت ══ */
+/* أسماء منطوقة بديلة (فصحى/عامية) لكل فحص — للمطابقة الصوتية فقط */
+const EXAM_VOICE = {
+  'Brain MRI': ['مخ','دماغ','راس','رأس','مخ عادي','برين','brain'],
+  'Brain MRA / MRV': ['مخ وشرايين واوردة','مخ شرايين اوردة','ام ار ايه ام ار في','mra mrv'],
+  'Brain MRA': ['شرايين المخ','شرايين مخ','mra مخ','برين ام ار ايه'],
+  'MRV Brain': ['اوردة المخ','اوردة مخ','وريد المخ','mrv','ام ار في'],
+  'Brain + MRV': ['مخ واوردة','المخ والاوردة','مخ و mrv','برين ام ار في'],
+  'Brain + MRA': ['مخ وشرايين','المخ والشرايين','مخ و mra'],
+  'MRA Carotid': ['شرايين الرقبة','شرايين رقبة','كاروتيد','carotid'],
+  'CPA': ['عصب سمعي','العصب السمعي','سي بي ايه','cpa','اذن','ودن','اودن'],
+  'MS Brain': ['ام اس مخ','ms مخ','تصلب مخ','ms brain'],
+  'MS Cervical Spine': ['ام اس فقرات عنقية','ms عنقية','ms رقبة','ام اس رقبة'],
+  'MS Brain + Cervical Spine': ['ام اس مخ وفقرات عنقية','ms مخ وعنقية','ms مخ ورقبة','ام اس مخ ورقبة'],
+  'TMJ': ['فك','مفصل الفك','تي ام جي','tmj'],
+  'Cervical Spine (C.S)': ['عنقية','فقرات عنقية','رقبة','فقرات رقبة','سي اس','cs','cervical'],
+  'Dorsal Spine (D.S)': ['صدرية','فقرات صدرية','ظهر','دي اس','ds','dorsal'],
+  'Lumbosacral Spine (L.S.S)': ['قطنية','فقرات قطنية','ضهر','اسفل الظهر','ال اس اس','lss','lumbar'],
+  'Whole Spine': ['عمود فقري كامل','عمود فقري','whole spine','كامل'],
+  'Shoulder': ['كتف'],
+  'Elbow': ['كوع','elbow'],
+  'Hand': ['يد','ايد','ايدي','كف'],
+  'Wrist': ['رسغ','معصم','ايد رسغ','wrist','ريست'],
+  'Thigh': ['فخذ'],
+  'Hip': ['مفصل حوض','مفصل الحوض','مفصل الفخذ','هيب','hip'],
+  'Knee': ['ركبة','knee'],
+  'Ankle': ['كاحل','رجل','ankle'],
+  'Foot': ['قدم','كعب','foot'],
+  'Abdomen': ['بطن'],
+  'Liver': ['كبد'],
+  'Kidneys': ['كلى','كلي','كلية','كليتين'],
+  'MRCP': ['قنوات مرارية','القنوات المرارية','مرارة','mrcp','ام ار سي بي'],
+  'Pelvis': ['حوض'],
+  'Abdomen + Pelvis': ['بطن وحوض','البطن والحوض'],
+  'Prostate': ['بروستاتا','prostate'],
+  'Uterus': ['رحم'],
+  'Ovary': ['مبيض','مبايض'],
+  'SIJ': ['مفصل ساكرو','ساكروايليك','sij','اس اي جي','عجز','مفصل عجزي'],
+  'Fistula': ['ناسور','فستيولا','fistula'],
+  'Anal Fistula': ['ناسور شرجي','شرجي','شرج'],
+  'Coccygeal Fistula': ['ناسور عصعصي','عصعصي','عصعص'],
+  'Breast': ['ثدي','صدر','breast'],
+  'Specific Part': ['جزء محدد','جزء معين','جزء'],
+  'Other': ['اخري','حاجة تانية','تانية','other'],
+};
+const _EX_STOP = new Set(['رنين','على','علي','اشعه','عمل','فحص','عايز','عاوز','عايزه','حاله','mri','ct','ام','ار','اي']);
 function _examTokens(t){
-  const stop = new Set(['رنين','على','اشعه','اشعة','عمل','مع','و','في','ال','mri','ct','فحص']);
-  return _normName(t).replace(/[^\u0600-\u06FFa-z0-9 ]/g,' ').split(' ').filter(w => w && !stop.has(w));
+  const out = [];
+  _normName(t).replace(/[^؀-ۿa-z0-9 ]/g,' ').split(' ').forEach(w => {
+    if (!w) return;
+    // واو العطف الملصقة (والاوردة → و + اوردة)
+    if (w.length >= 4 && w[0] === 'و' && !/^(وريد)/.test(w)) { out.push('و'); w = w.slice(1); }
+    if (w.length >= 4 && w.startsWith('ال')) w = w.slice(2);   // الكوع → كوع ، اليد → يد
+    out.push(w);
+  });
+  return out.filter(w => w === 'و' || !_EX_STOP.has(w));
+}
+function _exTokEq(a, b){
+  if (a === b) return true;
+  if (a.length < 3 || b.length < 3) return false;
+  if (Math.min(a.length, b.length) >= 4 && (a.startsWith(b) || b.startsWith(a)) && Math.abs(a.length - b.length) <= 2) return true;
+  if (a.length >= 5 && b.length >= 5 && Math.abs(a.length - b.length) <= 1) {   // خطأ حرف واحد من التعرف الصوتي
+    let i = 0, j = 0, d = 0;
+    while (i < a.length && j < b.length) {
+      if (a[i] === b[j]) { i++; j++; continue; }
+      if (++d > 1) return false;
+      if (a.length === b.length) { i++; j++; } else if (a.length > b.length) i++; else j++;
+    }
+    return d + (a.length - i) + (b.length - j) <= 1;
+  }
+  return false;
 }
 function _examMatch(spoken){
   const q = _examTokens(spoken); if (!q.length) return [];
-  const res = [];
-  const seen = new Set();
+  const qs = q.filter(w => w !== 'و');
+  if (!qs.length) return [];
+  const res = [], seen = new Set();
   getExamGroups().forEach(g => g.items.forEach(it => {
     if (seen.has(it)) return; seen.add(it);
-    const hay = _normName(it + ' ' + _examAliasHay(it));
-    const words = hay.split(/[^\u0600-\u06FFa-z0-9]+/).filter(Boolean);
-    let hit = 0;
-    q.forEach(w => { if (words.some(x => x === w || (w.length > 2 && (x.startsWith(w) || w.startsWith(x) && x.length > 2)))) hit++; });
-    if (!hit) return;
-    const score = hit / q.length - Math.min(0.3, Math.abs(words.length - q.length) * 0.02);
-    res.push({exam: it, score});
+    const aliases = [it, examLabel(it)].concat(EXAM_VOICE[it] || []);
+    Object.keys(EXAM_LEGACY).forEach(k => { if (EXAM_LEGACY[k] === it) aliases.push(k); });
+    let best = 0;
+    aliases.forEach(al => {
+      const A = _examTokens(al); if (!A.length) return;
+      const as = A.filter(w => w !== 'و');
+      let m = 0; const used = new Set();
+      qs.forEach(w => { const k = as.findIndex((x, i) => !used.has(i) && _exTokEq(w, x)); if (k >= 0) { used.add(k); m++; } });
+      if (!m) return;
+      let sc = 2 * m / (qs.length + as.length);
+      if (qs.length === as.length && m === as.length) sc = 1;
+      // عطف "و" المنطوق يرجّح الفحوصات المركبة
+      if (q.includes('و') !== A.includes('و')) sc -= 0.15;
+      if (sc > best) best = sc;
+    });
+    if (best >= 0.3) res.push({exam: it, score: Math.min(1, best)});
   }));
   return res.sort((a, b) => b.score - a.score).slice(0, 3);
 }
@@ -9147,7 +9246,7 @@ function addExamMic(row){
     const old = row.querySelector('.exam-sugg'); if (old) old.remove();
     const m = _examMatch(spoken);
     if (!m.length) { showToast('لم أجد فحصاً مطابقاً لـ «' + spoken + '»', 'error', 3500); return; }
-    if (m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.15)) {
+    if (m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.14)) {
       _examPick(row, m[0].exam); showToast('✅ ' + examLabel(m[0].exam), 'success', 2200); return;
     }
     const sg = document.createElement('div'); sg.className = 'exam-sugg';
@@ -9257,7 +9356,7 @@ async function vbStart(){
         if (_vb.paused) continue;
         if (!t) { await _vbWait(400); continue; }
         const m = _examMatch(t);
-        if (m.length && m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.15)) { _examPick(row, m[0].exam); done = true; }
+        if (m.length && m[0].score >= 0.8 && (!m[1] || m[0].score - m[1].score >= 0.14)) { _examPick(row, m[0].exam); done = true; }
         else if (m.length) {
           _vbSay(`اختر الفحص المناسب لـ «${t}» ⬇`);
           const old = row.querySelector('.exam-sugg'); if (old) old.remove();
